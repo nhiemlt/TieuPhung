@@ -72,7 +72,7 @@ public abstract class NguoiDungDAO extends ClinicDAO<NguoiDung, String> {
         return this.selectBySQL(sql);
     }
 
-    public NguoiDung selectById(String maND) {
+    public NguoiDung selectById(Integer maND) {
         String sql = "SELECT * FROM NguoiDung WHERE MaND=?";
         List<NguoiDung> list = this.selectBySQL(sql, maND);
         return list.size() > 0 ? list.get(0) : null;

@@ -80,11 +80,9 @@ public abstract class BenhNhanDAO extends ClinicDAO<BenhNhanModel, String> {
         }
         return list;
     }
-
-    @Override
-    public com.clinic.plp_clinicmanage.models.BenhNhanModel selectById(String id) {
-        String sql = "SELECT * FROM NguoiDung WHERE MaBN=?";
+        public com.clinic.plp_clinicmanage.models.BenhNhanModel selectById(Integer id) {
+            String sql = "SELECT * FROM NguoiDung WHERE MaBN=?";
         List<BenhNhanModel> list = this.selectBySQL(sql, id);
         return list.size() > 0 ? list.get(0) : null;
-    }
+        }
 }

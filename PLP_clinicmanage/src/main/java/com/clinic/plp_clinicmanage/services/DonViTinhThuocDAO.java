@@ -44,7 +44,7 @@ public abstract class DonViTinhThuocDAO extends ClinicDAO<DonViTinhThuoc, String
         return this.selectBySQL(sql);
     }
 
-    public DonViTinhThuoc selectById(String MaDVT) {
+    public DonViTinhThuoc selectById(Integer MaDVT) {
         String sql = "SELECT * FROM DONVITINH WHERE MaDVT=?";
         List<DonViTinhThuoc> list = this.selectBySQL(sql, MaDVT);
         return list.size() > 0 ? list.get(0) : null;
