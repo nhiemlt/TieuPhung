@@ -76,7 +76,7 @@ public abstract class ThuocDAO extends ClinicDAO<ThuocModel, String> {
                     entity.setTenThuoc(rs.getString("TenThuoc"));
                     entity.setCongDung(rs.getString("CongDung"));
                     entity.setHDLieuLuong(rs.getString("HDLieuLuong"));
-                    entity.setGiaTien(rs.getFloat("GiaTien"));
+                    entity.setGiaTien(rs.getString("GiaTien"));
                     entity.setSoLuong(rs.getInt("SoLuong"));
                     entity.setHanSD(rs.getDate("HanSD"));
                     entity.setMaDVT(rs.getInt("MaDVT"));

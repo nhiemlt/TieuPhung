@@ -13,16 +13,16 @@ import java.util.Vector;
 public class ToaThuocModel {
 
     private Integer MaTT;
-    private String MaBN;
+    private Integer MaBN;
     private String TongTien;
     private String NgayXuatHD;
-    private String MaND;
+    private Integer MaND;
 
     //contructor
     public ToaThuocModel() {
     }
 
-    public ToaThuocModel(Integer MaTT, String MaBN, String TongTien, String NgayXuatHD, String MaND) {
+    public ToaThuocModel(Integer MaTT, Integer MaBN, String TongTien, String NgayXuatHD, Integer MaND) {
         this.MaTT = MaTT;
         this.MaBN = MaBN;
         this.TongTien = TongTien;
@@ -39,11 +39,11 @@ public class ToaThuocModel {
         this.MaTT = MaTT;
     }
 
-    public String getMaBN() {
+    public Integer getMaBN() {
         return MaBN;
     }
 
-    public void setMaBN(String MaBN) {
+    public void setMaBN(Integer MaBN) {
         this.MaBN = MaBN;
     }
 
@@ -63,11 +63,11 @@ public class ToaThuocModel {
         this.NgayXuatHD = NgayXuatHD;
     }
 
-    public String getMaND() {
+    public Integer getMaND() {
         return MaND;
     }
 
-    public void setMaND(String MaND) {
+    public void setMaND(Integer MaND) {
         this.MaND = MaND;
     }
 

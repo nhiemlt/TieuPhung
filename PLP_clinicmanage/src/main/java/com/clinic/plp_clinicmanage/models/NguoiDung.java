@@ -5,7 +5,6 @@
 package com.clinic.plp_clinicmanage.models;
 
 import java.util.Objects;
-import java.util.Vector;
 
 /**
  *
@@ -41,6 +40,7 @@ public class NguoiDung {
         this.HinhAnh = HinhAnh;
     }
 
+    // Getters và Setters
     public Integer getMaND() {
         return MaND;
     }
@@ -119,5 +119,43 @@ public class NguoiDung {
 
     public void setHinhAnh(String HinhAnh) {
         this.HinhAnh = HinhAnh;
+    }
+
+    //method
+    public String tosString() {
+        return this.TenND;
+    }
+
+//     public boolean equals(Object obj) {
+//        NguoiDung other = (NguoiDung) obj;
+//        return other.getMaND().equals(this.getMaND());
+//    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true; // Kiểm tra xem đối tượng so sánh có cùng tham chiếu không
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false; // Kiểm tra null và kiểm tra cùng lớp
+        }
+        NguoiDung other = (NguoiDung) obj;
+        return this.getMaND().equals(other.getMaND()); // So sánh thuộc tính MaND
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7; // Giá trị khởi đầu cho mã băm
+        hash = 37 * hash + Objects.hashCode(this.MaND); // Nhân giá trị hiện tại với một số nguyên tố và thêm mã băm của thuộc tính MaND
+        return hash; // Trả về mã băm cuối cùng
+    }
+
+    public Object[] toObjectArray() {
+        return new Object[]{
+            this.getMaND(),
+            this.getTenND(),
+            this.getEmail(),
+            this.getSDT(),
+            this.getChucVu()
+        };
     }
 }
