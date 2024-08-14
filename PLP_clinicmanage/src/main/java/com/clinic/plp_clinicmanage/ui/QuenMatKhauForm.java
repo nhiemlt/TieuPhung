@@ -207,6 +207,7 @@ public class QuenMatKhauForm extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Mã xác nhận chưa đúng");
                 } else {
                     Auth.passwordTemp = sms.sendTempPassword(email);
+                    Auth.user = nd;
                     JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
                     new MainScreen().setVisible(true);
                     this.dispose();

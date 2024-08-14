@@ -11,10 +11,10 @@ package com.clinic.plp_clinicmanage.models;
 public class ToaThuocChiTietModel {
 
     private Integer MaTTCT;
-    private String MaTT;
-    private String MaBN;
-    private String MaND;
-    private String MaThuoc;
+    private Integer MaTT;
+    private Integer MaBN;
+    private Integer MaND;
+    private Integer MaThuoc;
     private int SoLuong;
     private String GiaBan;
     private String ThanhTien;
@@ -23,7 +23,7 @@ public class ToaThuocChiTietModel {
     public ToaThuocChiTietModel() {
     }
 
-    public ToaThuocChiTietModel(Integer MaTTCT, String MaTT, String MaBN, String MaND, String MaThuoc, int SoLuong, String GiaBan, String ThanhTien) {
+    public ToaThuocChiTietModel(Integer MaTTCT, Integer MaTT, Integer MaBN, Integer MaND, Integer MaThuoc, int SoLuong, String GiaBan, String ThanhTien) {
         this.MaTTCT = MaTTCT;
         this.MaTT = MaTT;
         this.MaBN = MaBN;
@@ -43,35 +43,35 @@ public class ToaThuocChiTietModel {
         this.MaTTCT = MaTTCT;
     }
 
-    public String getMaTT() {
+    public Integer getMaTT() {
         return MaTT;
     }
 
-    public void setMaTT(String MaTT) {
+    public void setMaTT(Integer MaTT) {
         this.MaTT = MaTT;
     }
 
-    public String getMaBN() {
+    public Integer getMaBN() {
         return MaBN;
     }
 
-    public void setMaBN(String MaBN) {
+    public void setMaBN(Integer MaBN) {
         this.MaBN = MaBN;
     }
 
-    public String getMaND() {
+    public Integer getMaND() {
         return MaND;
     }
 
-    public void setMaND(String MaND) {
+    public void setMaND(Integer MaND) {
         this.MaND = MaND;
     }
 
-    public String getMaThuoc() {
+    public Integer getMaThuoc() {
         return MaThuoc;
     }
 
-    public void setMaThuoc(String MaThuoc) {
+    public void setMaThuoc(Integer MaThuoc) {
         this.MaThuoc = MaThuoc;
     }
 

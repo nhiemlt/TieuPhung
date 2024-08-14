@@ -19,13 +19,13 @@ public class ThuocModel {
     private String GiaTien;
     private int SoLuong;
     private Date HanSD;
-    private String MaDVT;
+    private int MaDVT;
 
     //contructors
     public ThuocModel() {
     }
 
-    public ThuocModel(Integer MaThuoc, String TenThuoc, String CongDung, String HDLieuLuong, String GiaTien, int SoLuong, Date HanSD, String MaDVT) {
+    public ThuocModel(Integer MaThuoc, String TenThuoc, String CongDung, String HDLieuLuong, String GiaTien, int SoLuong, Date HanSD, int MaDVT) {
         this.MaThuoc = MaThuoc;
         this.TenThuoc = TenThuoc;
         this.CongDung = CongDung;
@@ -93,11 +93,11 @@ public class ThuocModel {
         this.HanSD = HanSD;
     }
 
-    public String getMaDVT() {
+    public int getMaDVT() {
         return MaDVT;
     }
 
-    public void setMaDVT(String MaDVT) {
+    public void setMaDVT(int MaDVT) {
         this.MaDVT = MaDVT;
     }
 
