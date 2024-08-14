@@ -1,3 +1,4 @@
+com\clinic\plp_clinicmanage\ui\Pay$3.class
 com\clinic\plp_clinicmanage\ui\Thuoc$5.class
 com\clinic\plp_clinicmanage\utils\XNumber.class
 com\clinic\plp_clinicmanage\utils\RandomOTP.class
@@ -27,6 +28,7 @@ com\clinic\plp_clinicmanage\ui\NhanVien.class
 com\clinic\plp_clinicmanage\services\ToaThuocDAO.class
 com\clinic\plp_clinicmanage\ui\Thuoc$7.class
 com\clinic\plp_clinicmanage\ui\DangNhap$5.class
+com\clinic\plp_clinicmanage\ui\Pay$5.class
 com\clinic\plp_clinicmanage\ui\BenhNhan$5.class
 com\clinic\plp_clinicmanage\ui\BacSi$6.class
 com\clinic\plp_clinicmanage\ui\NhanVien$2.class
@@ -54,6 +56,7 @@ com\clinic\plp_clinicmanage\ui\BenhNhan$3.class
 com\clinic\plp_clinicmanage\ui\ThongKe.class
 com\clinic\plp_clinicmanage\ui\DoiMatKhau$1.class
 com\clinic\plp_clinicmanage\models\DonViTinhThuoc.class
+com\clinic\plp_clinicmanage\ui\Pay$4.class
 com\clinic\plp_clinicmanage\ui\BenhNhan$6.class
 com\clinic\plp_clinicmanage\ui\Thuoc$1.class
 com\clinic\plp_clinicmanage\utils\MsgBox.class
@@ -72,6 +75,7 @@ com\clinic\plp_clinicmanage\ui\DoiMatKhau$4.class
 com\clinic\plp_clinicmanage\ui\Pay.class
 com\clinic\plp_clinicmanage\utils\Auth.class
 com\clinic\plp_clinicmanage\models\ThuocModel.class
+com\clinic\plp_clinicmanage\ui\Pay$2.class
 com\clinic\plp_clinicmanage\ui\QuenMatKhauForm.class
 com\clinic\plp_clinicmanage\ui\QuenMatKhauForm$3.class
 com\clinic\plp_clinicmanage\models\BenhNhanModel.class
