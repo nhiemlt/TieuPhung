@@ -41,10 +41,6 @@ public class NguoiDung {
         this.HinhAnh = HinhAnh;
     }
 
-<<<<<<< HEAD
-    // Getters và Setters
-=======
->>>>>>> 2c32de03eb62ec8eab0b5230a3c2b30b39fb83b4
     public Integer getMaND() {
         return MaND;
     }
@@ -123,13 +119,5 @@ public class NguoiDung {
 
     public void setHinhAnh(String HinhAnh) {
         this.HinhAnh = HinhAnh;
-    }
-
-   
-
-    // Getters và Setters
-
-    public Vector<?> toObjectArray() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
