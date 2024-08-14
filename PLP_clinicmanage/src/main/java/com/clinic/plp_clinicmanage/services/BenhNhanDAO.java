@@ -60,7 +60,7 @@ public abstract class BenhNhanDAO extends ClinicDAO<BenhNhanModel, String> {
                 rs = XJdbc.query(sql, args);
                 while (rs.next()) {
                     BenhNhanModel entity = new BenhNhanModel();
-                    entity.setMaBN(rs.getString("MaBN"));
+                    entity.setMaBN(rs.getInt("MaBN"));
                     entity.setTenBN(rs.getString("TENBN"));
                     entity.setGioiTinh(rs.getBoolean("GioiTinh"));
                     entity.setSoDT(rs.getString("SoDT"));
