@@ -12,11 +12,15 @@ import java.util.Date;
  */
 public class ThuocModel {
 
+<<<<<<< HEAD
     private Integer MaThuoc;
+=======
+    private int MaThuoc;
+>>>>>>> 2c32de03eb62ec8eab0b5230a3c2b30b39fb83b4
     private String TenThuoc;
     private String CongDung;
     private String HDLieuLuong;
-    private String GiaTien;
+    private float GiaTien;
     private int SoLuong;
     private Date HanSD;
     private int MaDVT;
@@ -25,7 +29,11 @@ public class ThuocModel {
     public ThuocModel() {
     }
 
+<<<<<<< HEAD
     public ThuocModel(Integer MaThuoc, String TenThuoc, String CongDung, String HDLieuLuong, String GiaTien, int SoLuong, Date HanSD, int MaDVT) {
+=======
+    public ThuocModel(int MaThuoc, String TenThuoc, String CongDung, String HDLieuLuong, float GiaTien, int SoLuong, Date HanSD, String MaDVT) {
+>>>>>>> 2c32de03eb62ec8eab0b5230a3c2b30b39fb83b4
         this.MaThuoc = MaThuoc;
         this.TenThuoc = TenThuoc;
         this.CongDung = CongDung;
@@ -37,11 +45,19 @@ public class ThuocModel {
     }
 
     // getter và setter
+<<<<<<< HEAD
     public Integer getMaThuoc() {
         return MaThuoc;
     }
 
     public void setMaThuoc(Integer MaThuoc) {
+=======
+    public int getMaThuoc() {
+        return MaThuoc;
+    }
+
+    public void setMaThuoc(int MaThuoc) {
+>>>>>>> 2c32de03eb62ec8eab0b5230a3c2b30b39fb83b4
         this.MaThuoc = MaThuoc;
     }
 
@@ -69,11 +85,11 @@ public class ThuocModel {
         this.HDLieuLuong = HDLieuLuong;
     }
 
-    public String getGiaTien() {
+    public float  getGiaTien() {
         return GiaTien;
     }
 
-    public void setGiaTien(String GiaTien) {
+    public void setGiaTien(float  GiaTien) {
         this.GiaTien = GiaTien;
     }
 
