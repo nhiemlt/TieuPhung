@@ -58,7 +58,7 @@ public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTietModel,
         return this.selectBySQL(sql);
     }
     
-    public ToaThuocChiTietModel selectById(String mattct){
+    public ToaThuocChiTietModel selectById(Integer mattct){
         String sql="SELECT * FROM TOATHUOCCHITIET WHERE MaTTCT=?";
         List<ToaThuocChiTietModel> list = this.selectBySQL(sql, mattct);
         return list.size() > 0 ? list.get(0) : null;
