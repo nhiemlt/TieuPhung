@@ -12,7 +12,7 @@ import java.util.Vector;
  */
 public class ToaThuocModel {
 
-    private String MaTT;
+    private Integer MaTT;
     private String MaBN;
     private String TongTien;
     private String NgayXuatHD;
@@ -22,7 +22,7 @@ public class ToaThuocModel {
     public ToaThuocModel() {
     }
 
-    public ToaThuocModel(String MaTT, String MaBN, String TongTien, String NgayXuatHD, String MaND) {
+    public ToaThuocModel(Integer MaTT, String MaBN, String TongTien, String NgayXuatHD, String MaND) {
         this.MaTT = MaTT;
         this.MaBN = MaBN;
         this.TongTien = TongTien;
@@ -31,11 +31,11 @@ public class ToaThuocModel {
     }
 
     //getter và setter
-    public String getMaTT() {
+    public Integer getMaTT() {
         return MaTT;
     }
 
-    public void setMaTT(String MaTT) {
+    public void setMaTT(Integer MaTT) {
         this.MaTT = MaTT;
     }
 

@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class NguoiDung {
 
-    private String MaND;
+    private Integer MaND;
     private String TenND;
     private String TenTK;
     private String MatKhau;
@@ -27,7 +27,7 @@ public class NguoiDung {
     public NguoiDung() {
     }
 
-    public NguoiDung(String MaND, String TenND, String TenTK, String MatKhau, boolean GioiTinh, int VaiTro, String Email, String ChucVu, String SDT, String HinhAnh) {
+    public NguoiDung(Integer MaND, String TenND, String TenTK, String MatKhau, boolean GioiTinh, int VaiTro, String Email, String ChucVu, String SDT, String HinhAnh) {
         this.MaND = MaND;
         this.TenND = TenND;
         this.TenTK = TenTK;
@@ -41,11 +41,11 @@ public class NguoiDung {
     }
 
     // Getters và Setters
-    public String getMaND() {
+    public Integer getMaND() {
         return MaND;
     }
 
-    public void setMaND(String MaND) {
+    public void setMaND(Integer MaND) {
         this.MaND = MaND;
     }
 

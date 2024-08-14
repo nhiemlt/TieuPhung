@@ -10,7 +10,7 @@ package com.clinic.plp_clinicmanage.models;
  */
 public class ToaThuocChiTietModel {
 
-    private String MaTTCT;
+    private Integer MaTTCT;
     private String MaTT;
     private String MaBN;
     private String MaND;
@@ -23,7 +23,7 @@ public class ToaThuocChiTietModel {
     public ToaThuocChiTietModel() {
     }
 
-    public ToaThuocChiTietModel(String MaTTCT, String MaTT, String MaBN, String MaND, String MaThuoc, int SoLuong, String GiaBan, String ThanhTien) {
+    public ToaThuocChiTietModel(Integer MaTTCT, String MaTT, String MaBN, String MaND, String MaThuoc, int SoLuong, String GiaBan, String ThanhTien) {
         this.MaTTCT = MaTTCT;
         this.MaTT = MaTT;
         this.MaBN = MaBN;
@@ -35,11 +35,11 @@ public class ToaThuocChiTietModel {
     }
 
     // getter và setter
-    public String getMaTTCT() {
+    public Integer getMaTTCT() {
         return MaTTCT;
     }
 
-    public void setMaTTCT(String MaTTCT) {
+    public void setMaTTCT(Integer MaTTCT) {
         this.MaTTCT = MaTTCT;
     }
 

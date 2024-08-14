@@ -10,22 +10,22 @@ package com.clinic.plp_clinicmanage.models;
  */
 public class DonViTinhThuoc {
 
-    private String MaDVT;
+    private Integer MaDVT;
     private String TenDVT;
 
     public DonViTinhThuoc() {
     }
 
-    public DonViTinhThuoc(String MaDVT, String TenDVT) {
+    public DonViTinhThuoc(Integer MaDVT, String TenDVT) {
         this.MaDVT = MaDVT;
         this.TenDVT = TenDVT;
     }
 
-    public String getMaDVT() {
+    public Integer getMaDVT() {
         return MaDVT;
     }
 
-    public void setMaDVT(String MaDVT) {
+    public void setMaDVT(Integer MaDVT) {
         this.MaDVT = MaDVT;
     }
 

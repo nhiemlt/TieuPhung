@@ -10,7 +10,7 @@ package com.clinic.plp_clinicmanage.models;
  */
 public class BenhNhanModel {
 
-    private String MaBN;
+    private Integer MaBN;
     private String TenBN;
     private boolean GioiTinh = true;
     private String SoDT;
@@ -22,7 +22,7 @@ public class BenhNhanModel {
     public BenhNhanModel() {
     }
 
-    public BenhNhanModel(String MaBN, String TenBN, String SoDT, String DiaChi, String Email, String TienSuBenh) {
+    public BenhNhanModel(Integer MaBN, String TenBN, String SoDT, String DiaChi, String Email, String TienSuBenh) {
         this.MaBN = MaBN;
         this.TenBN = TenBN;
         this.SoDT = SoDT;
@@ -52,11 +52,11 @@ public class BenhNhanModel {
     }
 
     // Getters và Setters
-    public String getMaBN() {
+    public Integer getMaBN() {
         return MaBN;
     }
 
-    public void setMaBN(String MaBN) {
+    public void setMaBN(Integer MaBN) {
         this.MaBN = MaBN;
     }
 
