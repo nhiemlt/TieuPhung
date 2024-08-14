@@ -64,7 +64,7 @@ public abstract class DonViTinhThuocDAO extends ClinicDAO<DonViTinhThuoc, String
                 rs = XJdbc.query(sql, args);
                 while (rs.next()) {
                     DonViTinhThuoc entity = new DonViTinhThuoc();
-                    entity.setMaDVT(rs.getString("MaDVT"));
+                    entity.setMaDVT(rs.getInt("MaDVT"));
                     entity.setTenDVT(rs.getString("TENDVT"));
                     list.add(entity);
                 }

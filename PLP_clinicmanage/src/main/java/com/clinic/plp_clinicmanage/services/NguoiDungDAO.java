@@ -108,7 +108,7 @@ protected List<NguoiDung> selectBySQL(String sql, Object... args) {
     ) {
         while (rs.next()) {
             NguoiDung entity = new NguoiDung();
-            entity.setMaND(rs.getString("MaND"));
+            entity.setMaND(rs.getInt("MaND"));
             entity.setTenND(rs.getString("TenND")); // Corrected column name
             entity.setTenTK(rs.getString("TenTK")); // Corrected column name
             entity.setMatKhau(rs.getString("MatKhau")); // Corrected column name

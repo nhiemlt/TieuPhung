@@ -88,7 +88,7 @@ public class Thuoc extends javax.swing.JPanel {
     
     public ThuocModel getForm(){
         ThuocModel thuoc = new ThuocModel();
-        thuoc.setMaThuoc(edtMaThuoc.getText());
+        thuoc.setMaThuoc(Integer.parseInt(edtSLConLai.getText()));
         thuoc.setCongDung(edtCongDung.getText());
         thuoc.setGiaTien(edtGiaTien.getText());
         thuoc.setSoLuong(Integer.parseInt(edtSLConLai.getText()));

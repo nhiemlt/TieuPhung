@@ -10,20 +10,20 @@ package com.clinic.plp_clinicmanage.models;
  */
 public class ToaThuocChiTietModel {
 
-    private String MaTTCT;
-    private String MaTT;
-    private String MaBN;
-    private String MaND;
-    private String MaThuoc;
+    private int MaTTCT;
+    private int MaTT;
+    private int MaBN;
+    private int MaND;
+    private int MaThuoc;
     private int SoLuong;
-    private String GiaBan;
-    private String ThanhTien;
+    private float  GiaBan;
+    private float  ThanhTien;
 
     //contructor
     public ToaThuocChiTietModel() {
     }
 
-    public ToaThuocChiTietModel(String MaTTCT, String MaTT, String MaBN, String MaND, String MaThuoc, int SoLuong, String GiaBan, String ThanhTien) {
+    public ToaThuocChiTietModel(int MaTTCT, int MaTT, int MaBN, int MaND, int MaThuoc, int SoLuong, float  GiaBan, float  ThanhTien) {
         this.MaTTCT = MaTTCT;
         this.MaTT = MaTT;
         this.MaBN = MaBN;
@@ -34,44 +34,43 @@ public class ToaThuocChiTietModel {
         this.ThanhTien = ThanhTien;
     }
 
-    // getter và setter
-    public String getMaTTCT() {
+    public int getMaTTCT() {
         return MaTTCT;
     }
 
-    public void setMaTTCT(String MaTTCT) {
+    public void setMaTTCT(int MaTTCT) {
         this.MaTTCT = MaTTCT;
     }
 
-    public String getMaTT() {
+    public int getMaTT() {
         return MaTT;
     }
 
-    public void setMaTT(String MaTT) {
+    public void setMaTT(int MaTT) {
         this.MaTT = MaTT;
     }
 
-    public String getMaBN() {
+    public int getMaBN() {
         return MaBN;
     }
 
-    public void setMaBN(String MaBN) {
+    public void setMaBN(int MaBN) {
         this.MaBN = MaBN;
     }
 
-    public String getMaND() {
+    public int getMaND() {
         return MaND;
     }
 
-    public void setMaND(String MaND) {
+    public void setMaND(int MaND) {
         this.MaND = MaND;
     }
 
-    public String getMaThuoc() {
+    public int getMaThuoc() {
         return MaThuoc;
     }
 
-    public void setMaThuoc(String MaThuoc) {
+    public void setMaThuoc(int MaThuoc) {
         this.MaThuoc = MaThuoc;
     }
 
@@ -83,20 +82,21 @@ public class ToaThuocChiTietModel {
         this.SoLuong = SoLuong;
     }
 
-    public String getGiaBan() {
+    public float getGiaBan() {
         return GiaBan;
     }
 
-    public void setGiaBan(String GiaBan) {
+    public void setGiaBan(float GiaBan) {
         this.GiaBan = GiaBan;
     }
 
-    public String getThanhTien() {
+    public float getThanhTien() {
         return ThanhTien;
     }
 
-    public void setThanhTien(String ThanhTien) {
+    public void setThanhTien(float ThanhTien) {
         this.ThanhTien = ThanhTien;
     }
 
+    // getter và setter
 }

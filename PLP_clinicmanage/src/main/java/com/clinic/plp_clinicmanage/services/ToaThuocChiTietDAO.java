@@ -73,14 +73,14 @@ public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTietModel,
 //               (MaTTCT, MaTT, MaBN , MaND, MaThuoc, SoLuong, GiaBan, ThanhTien) 
                 while (rs.next()) {
                     ToaThuocChiTietModel entity = new ToaThuocChiTietModel();
-                    entity.setMaTTCT(rs.getString("MaTTCT"));
-                    entity.setMaTT(rs.getString("MaTT"));
-                    entity.setMaBN(rs.getString("MaBN"));
-                    entity.setMaND(rs.getString("MaND"));
-                    entity.setMaThuoc(rs.getString("MaThuoc"));
+                    entity.setMaTTCT(rs.getInt("MaTTCT"));
+                    entity.setMaTT(rs.getInt("MaTT"));
+                    entity.setMaBN(rs.getInt("MaBN"));
+                    entity.setMaND(rs.getInt("MaND"));
+                    entity.setMaThuoc(rs.getInt("MaThuoc"));
                     entity.setSoLuong(rs.getInt("SoLuong"));
-                    entity.setGiaBan(rs.getString("GiaBan"));
-                    entity.setThanhTien(rs.getString("ThanhTien"));
+                    entity.setGiaBan(rs.getFloat("GiaBan"));
+                    entity.setThanhTien(rs.getFloat("ThanhTien"));
                     list.add(entity);
                 }
             } finally {

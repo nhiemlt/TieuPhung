@@ -12,11 +12,11 @@ import java.util.Date;
  */
 public class ThuocModel {
 
-    private String MaThuoc;
+    private int MaThuoc;
     private String TenThuoc;
     private String CongDung;
     private String HDLieuLuong;
-    private String GiaTien;
+    private float GiaTien;
     private int SoLuong;
     private Date HanSD;
     private String MaDVT;
@@ -25,7 +25,7 @@ public class ThuocModel {
     public ThuocModel() {
     }
 
-    public ThuocModel(String MaThuoc, String TenThuoc, String CongDung, String HDLieuLuong, String GiaTien, int SoLuong, Date HanSD, String MaDVT) {
+    public ThuocModel(int MaThuoc, String TenThuoc, String CongDung, String HDLieuLuong, float GiaTien, int SoLuong, Date HanSD, String MaDVT) {
         this.MaThuoc = MaThuoc;
         this.TenThuoc = TenThuoc;
         this.CongDung = CongDung;
@@ -37,11 +37,11 @@ public class ThuocModel {
     }
 
     // getter và setter
-    public String getMaThuoc() {
+    public int getMaThuoc() {
         return MaThuoc;
     }
 
-    public void setMaThuoc(String MaThuoc) {
+    public void setMaThuoc(int MaThuoc) {
         this.MaThuoc = MaThuoc;
     }
 
@@ -69,11 +69,11 @@ public class ThuocModel {
         this.HDLieuLuong = HDLieuLuong;
     }
 
-    public String getGiaTien() {
+    public float  getGiaTien() {
         return GiaTien;
     }
 
-    public void setGiaTien(String GiaTien) {
+    public void setGiaTien(float  GiaTien) {
         this.GiaTien = GiaTien;
     }
 
