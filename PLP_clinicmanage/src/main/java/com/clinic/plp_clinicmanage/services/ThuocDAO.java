@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author LENOVO
  */
-public abstract class ThuocDAO extends ClinicDAO<ThuocModel, String> {
+public abstract class ThuocDAO extends ClinicDAO<ThuocModel, Integer> {
 
     public void insert(ThuocModel model) {
         String sql = "INSERT INTO THUOC(MaThuoc,TenThuoc,CongDung,HDLieuLuong,GiaTien,SoLuong,HanSD,MaDVT)values (?,?,?,?,?,?,?,?)";
@@ -46,7 +46,7 @@ public abstract class ThuocDAO extends ClinicDAO<ThuocModel, String> {
         );
     }
 
-    public void delete(String MaThuoc) {
+    public void delete(Integer MaThuoc) {
         String sql = "DELETE FROM THUOC WHERE MaThuoc=?";
         XJdbc.update(sql, MaThuoc);
     }
@@ -92,11 +92,5 @@ public abstract class ThuocDAO extends ClinicDAO<ThuocModel, String> {
             throw new RuntimeException(ex);
         }
         return list;
-    }
-
-    private static class THUOC {
-
-        public THUOC() {
-        }
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author LENOVO
  */
-public abstract class NguoiDungDAO extends ClinicDAO<NguoiDung, String> {
+public abstract class NguoiDungDAO extends ClinicDAO<NguoiDung, Integer> {
 
     public void insert(NguoiDung model) {
         String sql = "INSERT INTO NGUOIDUNG(MaND, TenND, TenTK, MatKhau, GioiTinh,Email, VaiTro, ChucVu, SDT, HinhAnh) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?)";
@@ -62,7 +62,7 @@ public abstract class NguoiDungDAO extends ClinicDAO<NguoiDung, String> {
         );
     }
 
-    public void delete(String MaND) {
+    public void delete(Integer MaND) {
         String sql = "DELETE FROM NGUOIDUNG WHERE MaND=?";
         XJdbc.update(sql, MaND);
     }

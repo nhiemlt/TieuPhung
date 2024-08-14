@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author LENOVO
  */
-public abstract class DonViTinhThuocDAO extends ClinicDAO<DonViTinhThuoc, String>{
+public abstract class DonViTinhThuocDAO extends ClinicDAO<DonViTinhThuoc, Integer>{
 
     public void insert(DonViTinhThuoc model) {
         String sql = "INSERT INTO DONVITINH(MaDVT, TenDVT) VALUES (?, ?)";
@@ -34,7 +34,7 @@ public abstract class DonViTinhThuocDAO extends ClinicDAO<DonViTinhThuoc, String
         );
     }
 
-    public void delete(String MaND) {
+    public void delete(Integer MaND) {
         String sql = "DELETE FROM DONVITINH WHERE MaDVT=?";
         XJdbc.update(sql, MaND);
     }

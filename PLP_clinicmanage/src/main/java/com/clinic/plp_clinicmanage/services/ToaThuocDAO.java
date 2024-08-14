@@ -17,7 +17,7 @@ import java.util.List;
  * @author LENOVO
  */
 
-public abstract class ToaThuocDAO extends ClinicDAO<ToaThuocModel, String> {
+public abstract class ToaThuocDAO extends ClinicDAO<ToaThuocModel, Integer> {
 
     public void insert(ToaThuocModel model) {
         String sql = "INSERT INTO TOATHUOC (MaTT, MaBN,	 TongTien, NgayXuatHD, MaND) VALUES (?, ?, ?, ?, ?)";
@@ -41,7 +41,7 @@ public abstract class ToaThuocDAO extends ClinicDAO<ToaThuocModel, String> {
         );
     }
 
-    public void delete(String MaTT) {
+    public void delete(Integer MaTT) {
         String sql = "DELETE FROM TOATHUOC WHERE MaTT=?";
         XJdbc.update(sql, MaTT);
     }

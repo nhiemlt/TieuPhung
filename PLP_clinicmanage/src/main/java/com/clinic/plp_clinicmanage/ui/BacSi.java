@@ -24,10 +24,42 @@ public class BacSi extends javax.swing.JPanel {
         fillTable();
     }
     
+     int row = -1;
+    NguoiDungDAO dao = new NguoiDungDAO() {
+       
+    };
+    
+       void init() {
+        setLocationRelativeTo(null);
+        this.fillTable();
+        this.row = -1;
+        this.updateStatus();
+    }
+    
+
+    void fillTable() {
+        DefaultTableModel model = (DefaultTableModel) tblDoctor.getModel();
+        model.setRowCount(0);
+        try {
+            List<NguoiDung> list = dao.selectAll();
+            for (NguoiDung cd : list) {
+                Object[] row = {
+                    cd.getMaND(),
+                    cd.getTenND(),
+                    cd.getEmail(),
+                    cd.getSDT(),};
+                if (cd.getVaiTro() == 2) {
+                    model.addRow(row);
+                }
+            }
+        } catch (Exception e) {
+            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
 //    public NguoiDung getData(){
 //        String MaND =   
 //    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -354,35 +386,9 @@ public class BacSi extends javax.swing.JPanel {
     private javax.swing.JRadioButton rbNu;
     private javax.swing.JTable tblDoctor;
     // End of variables declaration//GEN-END:variables
-int row = -1;
-    NguoiDungDAO dao = new NguoiDungDAO() {};
-    
-    void init() {
-       setLocationRelativeTo(null);
-        this.fillTable();
-        this.row = -1;
-        this.updateStatus();
-    }
-    
-    void fillTable() {
-          DefaultTableModel model = (DefaultTableModel) tblDoctor.getModel();
-        model.setRowCount(0);
-        try {
-            List<NguoiDung> list = dao.selectAll();
-            for (NguoiDung cd : list) {
-                Object[] row = {
-                    cd.getMaND(),
-                    cd.getTenND(),
-                    cd.getEmail(),
-                    cd.getSDT(),};
-                if (cd.getVaiTro() == 2) {
-                    model.addRow(row);
-                }
-            }
-        } catch (Exception e) {
-            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
-        }
-    }
+   
+
+ 
 
     private void setLocationRelativeTo(Object object) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

@@ -21,27 +21,24 @@ import java.util.Date;
 public class Thuoc extends javax.swing.JPanel {
 
     private int row;
-
-    /**
-     * Creates new form Thuoc
-     */
+    
     public Thuoc() {
         initComponents();
         init();
     }
 
-    ThuocDAO tDao = new ThuocDAO() {
-    };
-    DonViTinhThuocDAO dvtDao = new DonViTinhThuocDAO() {
-    };
+
+    DonViTinhThuocDAO dvtDao = new DonViTinhThuocDAO() {};
+    
+    ThuocDAO tDao = new ThuocDAO() {};
 
     void init() {
         this.fillToTable();
-        initComboboxMauSac();
+        initComboboxDVT();
         this.row = -1;
     }
 
-    void initComboboxMauSac() {
+    void initComboboxDVT() {
         DefaultComboBoxModel cboModel = (DefaultComboBoxModel) cboDonViTinh.getModel();
         cboDonViTinh.removeAllItems();
         List<DonViTinhThuoc> dvtList = dvtDao.selectAll();
@@ -141,7 +138,10 @@ public class Thuoc extends javax.swing.JPanel {
 
         tblThuoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {"dfsd", "fdsf", "sfd", "sfd"},
                 {"sds", "sda", "sds", null},
+                {null, null, null, null},
+                {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
@@ -151,7 +151,7 @@ public class Thuoc extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -170,6 +170,7 @@ public class Thuoc extends javax.swing.JPanel {
         jLabel4.setText("Mã thuốc:");
 
         edtMaThuoc.setText("TH001");
+        edtMaThuoc.setEnabled(false);
         edtMaThuoc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 edtMaThuocActionPerformed(evt);
@@ -402,7 +403,7 @@ public class Thuoc extends javax.swing.JPanel {
     private void tblThuocMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblThuocMouseClicked
         int selectedRow = tblThuoc.getSelectedRow();
         if (evt.getClickCount() == 2) {
-            String id = tblThuoc.getValueAt(selectedRow, 0).toString();
+            int id = Integer.parseInt(tblThuoc.getValueAt(selectedRow, 0).toString());
             ThuocModel thuoc = tDao.selectById(id);
             setForm(thuoc);
         }

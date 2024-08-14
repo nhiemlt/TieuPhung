@@ -35,7 +35,6 @@ com\clinic\plp_clinicmanage\utils\PrintPrescription.class
 com\clinic\plp_clinicmanage\ui\DangNhap.class
 com\clinic\plp_clinicmanage\ui\Thuoc$6.class
 com\clinic\plp_clinicmanage\ui\NhanVien$3.class
-com\clinic\plp_clinicmanage\services\ThuocDAO$THUOC.class
 com\clinic\plp_clinicmanage\ui\BenhNhan$4.class
 com\clinic\plp_clinicmanage\ui\Loading$1.class
 com\clinic\plp_clinicmanage\models\OTPTemp.class

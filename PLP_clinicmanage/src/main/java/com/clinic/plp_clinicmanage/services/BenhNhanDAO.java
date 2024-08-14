@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author LENOVO
  */
-public abstract class BenhNhanDAO extends ClinicDAO<BenhNhanModel, String> {
+public abstract class BenhNhanDAO extends ClinicDAO<BenhNhanModel, Integer> {
 
     public void insert(BenhNhanModel model) {
         String sql = "INSERT INTO BENHNHAN(MaBN, TenBN, GioiTinh,SoDT,DiaChi,Email,TienSuBenh) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -42,7 +42,7 @@ public abstract class BenhNhanDAO extends ClinicDAO<BenhNhanModel, String> {
         );
     }
 
-    public void delete(String MaBN) {
+    public void delete(Integer MaBN) {
         String sql = "DELETE FROM BENHNHAN WHERE MaBN=?";
         XJdbc.update(sql, MaBN);
     }
