@@ -18,9 +18,9 @@ import java.util.List;
 public abstract class BenhNhanDAO extends ClinicDAO<BenhNhanModel, Integer> {
 
     public void insert(BenhNhanModel model) {
-        String sql = "INSERT INTO BENHNHAN(MaBN, TenBN, GioiTinh,SoDT,DiaChi,Email,TienSuBenh) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO BENHNHAN( TenBN, GioiTinh,SoDT,DiaChi,Email,TienSuBenh) VALUES ( ?, ?, ?, ?, ?, ?)";
         XJdbc.update(sql,
-                model.getMaBN(),
+                
                 model.getTenBN(),
                 model.isGioiTinh(),
                 model.getSoDT(),
@@ -42,6 +42,17 @@ public abstract class BenhNhanDAO extends ClinicDAO<BenhNhanModel, Integer> {
         );
     }
 
+     public BenhNhanModel selectByEmail(String email) {
+        String sql = "SELECT * FROM BenhNhan WHERE Email like ?";
+        List<BenhNhanModel> list = this.selectBySQL(sql, email);
+        return list.size() > 0 ? list.get(0) : null;
+    }
+     
+      public BenhNhanModel selectBySDT(String sdt) {
+        String sql = "SELECT * FROM BenhNhan WHERE SoDT like ?";
+        List<BenhNhanModel> list = this.selectBySQL(sql, sdt);
+        return list.size() > 0 ? list.get(0) : null;
+    }
     public void delete(Integer MaBN) {
         String sql = "DELETE FROM BENHNHAN WHERE MaBN=?";
         XJdbc.update(sql, MaBN);
@@ -80,9 +91,11 @@ public abstract class BenhNhanDAO extends ClinicDAO<BenhNhanModel, Integer> {
         }
         return list;
     }
-        public com.clinic.plp_clinicmanage.models.BenhNhanModel selectById(Integer id) {
-            String sql = "SELECT * FROM NguoiDung WHERE MaBN=?";
+
+    public com.clinic.plp_clinicmanage.models.BenhNhanModel selectById(Integer id) {
+        String sql = "SELECT * FROM BenhNhan WHERE MaBN=?";
+
         List<BenhNhanModel> list = this.selectBySQL(sql, id);
         return list.size() > 0 ? list.get(0) : null;
-        }
+    }
 }

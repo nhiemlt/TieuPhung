@@ -11,6 +11,7 @@ import com.clinic.plp_clinicmanage.utils.MsgBox;
 import java.util.ArrayList;
 import java.util.List;
 import javax.management.modelmbean.ModelMBean;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,14 +22,120 @@ public class BenhNhan extends javax.swing.JPanel {
 
     private int row;
 
-    public BenhNhan(){
+    public BenhNhan() {
         initComponents();
         init();
     }
+    BenhNhanDAO dao = new BenhNhanDAO() {
+    };
+
+    public void setForm(BenhNhanModel benhNhan) {
+        Boolean gioiTinh = benhNhan.isGioiTinh();
+        rbNam.setSelected(gioiTinh);
+        rbNu.setSelected(!gioiTinh);
+        edtBN.setText(benhNhan.getMaBN() + "");
+        edtTenBN.setText(benhNhan.getTenBN());
+        edtEmail.setText(benhNhan.getEmail());
+        edtSĐT.setText(benhNhan.getSoDT());
+        edtDiaChi.setText(benhNhan.getDiaChi() + "");
+        edtTienSuBenh.setText(benhNhan.getTienSuBenh());
+
+    }
+
+    public void clearForm() {
+        edtBN.setText("");
+        edtTenBN.setText("");
+        edtEmail.setText("");
+        edtSĐT.setText("");
+        edtDiaChi.setText("");
+        edtTienSuBenh.setText("");
+        rbNam.setSelected(true);
+    }
+
+    public BenhNhanModel getForm() {
+        BenhNhanModel benhNhanModel = new BenhNhanModel();
+        if (!edtBN.getText().isEmpty()) {
+            benhNhanModel.setMaBN(Integer.parseInt(edtBN.getText()));
+        }
+        benhNhanModel.setTenBN(edtTenBN.getText());
+        benhNhanModel.setEmail(edtEmail.getText());
+        benhNhanModel.setSoDT(edtSĐT.getText());
+        benhNhanModel.setDiaChi(edtDiaChi.getText());
+        benhNhanModel.setTienSuBenh(edtTienSuBenh.getText());
+        if (rbNam.isSelected()) {
+            benhNhanModel.setGioiTinh(true);
+        } else {
+            benhNhanModel.setGioiTinh(false);
+        }
+
+        return benhNhanModel;
+    }
+
+    public String kiemLoiThem() {
+        String err = "";
+        String emailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
+        String sdtRegex = "^(0[35789]\\d{8}|02\\d{9})$";
+        BenhNhanModel bn = getForm();
+        if (bn.getTenBN().isEmpty() || bn.getTenBN().isBlank()) {
+            err += "Tên không được bỏ trống!\n";
+        }
+
+        if (!bn.getEmail().matches(emailRegex)) {
+            err += "Email sai định dạng\n";
+        }
+        if (dao.selectByEmail(bn.getEmail()) != null) {
+            err += "Email đã tồn tại\n";
+
+        }
+
+        if (!bn.getSoDT().matches(sdtRegex)) {
+            err += "Số điện thoại sai định dạng\n";
+        }
+        if (dao.selectBySDT(bn.getSoDT()) != null) {
+            err += "Số điện thoại đã tồn tại\n";
+
+        }
+
+        if (bn.getDiaChi().isEmpty() || bn.getDiaChi().isBlank()) {
+            err += "Địa chỉ không được bỏ trống!\n";
+        }
+        if (bn.getTienSuBenh().isEmpty() || bn.getTienSuBenh().isBlank()) {
+            err += "Tiền sử bệnh không được bỏ trống!\n";
+        }
+        return err;
+    }
+
+    public String kiemLoiSua() {
+        String err = "";
+        String emailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
+        String sdtRegex = "^(0[35789]\\d{8}|02\\d{9})$";
+        BenhNhanModel bn = getForm();
+        if (bn.getTenBN().isEmpty() || bn.getTenBN().isBlank()) {
+            err += "Tên không được bỏ trống!\n";
+        }
+
+        if (!bn.getEmail().matches(emailRegex)) {
+            err += "Email sai định dạng\n";
+        }
+
+        if (!bn.getSoDT().matches(sdtRegex)) {
+            err += "Số điện thoại sai định dạng\n";
+        }
+
+        if (bn.getDiaChi().isEmpty() || bn.getDiaChi().isBlank()) {
+            err += "Địa chỉ không được bỏ trống!\n";
+        }
+        if (bn.getTienSuBenh().isEmpty() || bn.getTienSuBenh().isBlank()) {
+            err += "Tiền sử bệnh không được bỏ trống!\n";
+        }
+        return err;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -51,10 +158,10 @@ public class BenhNhan extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         edtDiaChi = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnMoi = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
@@ -73,7 +180,20 @@ public class BenhNhan extends javax.swing.JPanel {
             new String [] {
                 "Mã bệnh nhân", "Tên bệnh nhân", "Email", "Tiền sử bệnh"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblBN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBNMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblBN);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin"));
@@ -81,6 +201,7 @@ public class BenhNhan extends javax.swing.JPanel {
         jLabel4.setText("Mã bênh nhân:");
 
         edtBN.setText("BN001");
+        edtBN.setEnabled(false);
         edtBN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 edtBNActionPerformed(evt);
@@ -89,6 +210,7 @@ public class BenhNhan extends javax.swing.JPanel {
 
         jLabel5.setText("Giới tính:");
 
+        buttonGroup1.add(rbNam);
         rbNam.setSelected(true);
         rbNam.setText("Nam");
         rbNam.addActionListener(new java.awt.event.ActionListener() {
@@ -97,7 +219,13 @@ public class BenhNhan extends javax.swing.JPanel {
             }
         });
 
+        buttonGroup1.add(rbNu);
         rbNu.setText("Nữ");
+        rbNu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbNuActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Số điện thoại:");
 
@@ -221,16 +349,31 @@ public class BenhNhan extends javax.swing.JPanel {
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_icon/Search.png"))); // NOI18N
 
-        jButton2.setText("Mới");
-
-        jButton3.setText("Thêm");
-
-        jButton4.setText("Sửa");
-
-        jButton5.setText("Xóa");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnMoi.setText("Mới");
+        btnMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnMoiActionPerformed(evt);
+            }
+        });
+
+        btnThem.setText("Thêm");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
+
+        btnSua.setText("Sửa");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
+
+        btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
             }
         });
 
@@ -265,12 +408,12 @@ public class BenhNhan extends javax.swing.JPanel {
                                 .addComponent(jButton8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(btnMoi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnThem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -311,12 +454,12 @@ public class BenhNhan extends javax.swing.JPanel {
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(3, 3, 3)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton2)
-                                        .addComponent(jButton4))
+                                        .addComponent(btnMoi)
+                                        .addComponent(btnSua))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton3)
-                                        .addComponent(jButton5))))
+                                        .addComponent(btnThem)
+                                        .addComponent(btnXoa))))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jButton9)
                                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -345,21 +488,81 @@ public class BenhNhan extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_edtTenBNActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        if (edtBN.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn bênh nhân cần xoá!");
+        } else {
+            try {
+                int maBN = Integer.parseInt(edtBN.getText());
+                dao.delete(maBN);
+                JOptionPane.showMessageDialog(this, "Xoá thành cống!");
+                fillTable();
+                clearForm();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Không thể xoá bệnh nhân này!!");
+            }
+        }
+
+    }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void tblBNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBNMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+        int selectedRow = tblBN.getSelectedRow();
+        if (evt.getClickCount() == 2) {
+            int id = Integer.parseInt(tblBN.getValueAt(selectedRow, 0).toString());
+            BenhNhanModel benhNhanModel = dao.selectById(id);
+            setForm(benhNhanModel);
+        }
+    }//GEN-LAST:event_tblBNMouseClicked
+
+    private void btnMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoiActionPerformed
+        // TODO add your handling code here:
+        clearForm();
+    }//GEN-LAST:event_btnMoiActionPerformed
+
+    private void rbNuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbNuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbNuActionPerformed
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        // TODO add your handling code here:
+        String err = kiemLoiThem();
+        if (!err.isEmpty()) {
+            JOptionPane.showMessageDialog(this, err);
+        } else {
+            BenhNhanModel bn = getForm();
+            dao.insert(bn);
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+            fillTable();
+        }
+
+
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        // TODO add your handling code here:
+        String err = kiemLoiSua();
+        if (!err.isEmpty()) {
+            JOptionPane.showMessageDialog(this, err);
+        } else {
+            BenhNhanModel bn = getForm();
+            dao.update(bn);
+            JOptionPane.showMessageDialog(this, "Sửa thành công");
+            fillTable();
+        }
+    }//GEN-LAST:event_btnSuaActionPerformed
     void init() {
         this.fillTable();
         this.row = -1;
     }
 
     public void fillTable() {
-        BenhNhanDAO bndao = new BenhNhanDAO() {
+        BenhNhanDAO dao = new BenhNhanDAO() {
         };
         DefaultTableModel model = (DefaultTableModel) tblBN.getModel();
         model.setRowCount(0);
         try {
-            List<BenhNhanModel> list = bndao.selectAll();
+            List<BenhNhanModel> list = dao.selectAll();
             for (BenhNhanModel cd : list) {
                 Object[] row = {
                     cd.getMaBN(),
@@ -376,6 +579,11 @@ public class BenhNhan extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMoi;
+    private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnThem;
+    private javax.swing.JButton btnXoa;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField edtBN;
     private javax.swing.JTextField edtDiaChi;
     private javax.swing.JTextField edtEmail;
@@ -383,10 +591,6 @@ public class BenhNhan extends javax.swing.JPanel {
     private javax.swing.JTextField edtTenBN;
     private javax.swing.JTextArea edtTienSuBenh;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
