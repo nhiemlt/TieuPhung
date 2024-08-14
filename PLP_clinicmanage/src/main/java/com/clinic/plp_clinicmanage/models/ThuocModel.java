@@ -12,20 +12,20 @@ import java.util.Date;
  */
 public class ThuocModel {
 
-    private int MaThuoc;
+    private Integer MaThuoc;
     private String TenThuoc;
     private String CongDung;
     private String HDLieuLuong;
-    private float GiaTien;
+    private String GiaTien;
     private int SoLuong;
     private Date HanSD;
-    private int MaDVT;
+    private Integer MaDVT;
 
     //contructors
     public ThuocModel() {
     }
 
-    public ThuocModel(int MaThuoc, String TenThuoc, String CongDung, String HDLieuLuong, float GiaTien, int SoLuong, Date HanSD, int MaDVT) {
+    public ThuocModel(Integer MaThuoc, String TenThuoc, String CongDung, String HDLieuLuong, String GiaTien, int SoLuong, Date HanSD, Integer MaDVT) {
         this.MaThuoc = MaThuoc;
         this.TenThuoc = TenThuoc;
         this.CongDung = CongDung;
@@ -36,11 +36,12 @@ public class ThuocModel {
         this.MaDVT = MaDVT;
     }
 
-    public int getMaThuoc() {
+    // getter và setter
+    public Integer getMaThuoc() {
         return MaThuoc;
     }
 
-    public void setMaThuoc(int MaThuoc) {
+    public void setMaThuoc(Integer MaThuoc) {
         this.MaThuoc = MaThuoc;
     }
 
@@ -68,11 +69,11 @@ public class ThuocModel {
         this.HDLieuLuong = HDLieuLuong;
     }
 
-    public float getGiaTien() {
+    public String getGiaTien() {
         return GiaTien;
     }
 
-    public void setGiaTien(float GiaTien) {
+    public void setGiaTien(String GiaTien) {
         this.GiaTien = GiaTien;
     }
 
@@ -92,11 +93,12 @@ public class ThuocModel {
         this.HanSD = HanSD;
     }
 
-    public int getMaDVT() {
+    public Integer getMaDVT() {
         return MaDVT;
     }
 
-    public void setMaDVT(int MaDVT) {
+    public void setMaDVT(Integer MaDVT) {
         this.MaDVT = MaDVT;
     }
+
 }

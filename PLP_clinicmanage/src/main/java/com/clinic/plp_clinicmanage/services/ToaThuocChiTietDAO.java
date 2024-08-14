@@ -79,8 +79,8 @@ public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTietModel,
                     entity.setMaND(rs.getInt("MaND"));
                     entity.setMaThuoc(rs.getInt("MaThuoc"));
                     entity.setSoLuong(rs.getInt("SoLuong"));
-                    entity.setGiaBan(rs.getFloat("GiaBan"));
-                    entity.setThanhTien(rs.getFloat("ThanhTien"));
+                    entity.setGiaBan(rs.getString("GiaBan"));
+                    entity.setThanhTien(rs.getString("ThanhTien"));
                     list.add(entity);
                 }
             } finally {
