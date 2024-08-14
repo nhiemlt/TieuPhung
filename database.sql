@@ -159,3 +159,6 @@ INSERT INTO PHIEUKHAM (MaPK, MaBN, MaND, NgayKham, MaBS, ChuanDoan, DonThuoc, Kh
 ('PK009', 'BN009', 'ND009', '2024-08-09', 'ND009', N'Dị ứng thực phẩm', N'VITAMIN D 1000IU 1 viên x 15 ngày', N'Khám da, kiểm tra dị ứng'),
 ('PK010', 'BN010', 'ND010', '2024-08-10', 'ND010', N'Dị ứng thực phẩm', N'CALCIUM 500MG 1 viên x 20 ngày', N'Khám da, kiểm tra dị ứng');
 GO
+
+INSERT INTO NGUOIDUNG (MaND, TenND, TenTK, MatKhau, GioiTinh, Email, VaiTro, ChucVu, SDT, HinhAnh) VALUES
+('NV004', N'BS CKII Lý Tính Nhiệm', N'nhiemlt', '123', 1, 'lytinhnhiem@gmail.com', 2, N'Bác sĩ', '0787833283', N'BS-NHIEM.png')

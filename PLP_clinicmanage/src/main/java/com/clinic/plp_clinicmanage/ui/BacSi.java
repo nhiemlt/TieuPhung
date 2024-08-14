@@ -37,6 +37,7 @@ public class BacSi extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -98,9 +99,11 @@ public class BacSi extends javax.swing.JPanel {
 
         jLabel5.setText("Giới tính:");
 
+        buttonGroup1.add(rbNam);
         rbNam.setSelected(true);
         rbNam.setText("Nam");
 
+        buttonGroup1.add(rbNu);
         rbNu.setText("Nữ");
 
         jLabel6.setText("Số điện thoại:");
@@ -320,6 +323,7 @@ public class BacSi extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField edtChucVu;
     private javax.swing.JTextArea edtGhiChu;
     private javax.swing.JTextField edtSĐT;

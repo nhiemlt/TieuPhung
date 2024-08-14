@@ -5,7 +5,7 @@
 package com.clinic.plp_clinicmanage.services;
 
 
-import com.clinic.plp_clinicmanage.models.ToaThuoc;
+import com.clinic.plp_clinicmanage.models.ToaThuocModel;
 import com.clinic.plp_clinicmanage.utils.XJdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,9 +17,9 @@ import java.util.List;
  * @author LENOVO
  */
 
-public abstract class ToaThuocDAO extends ClinicDAO<ToaThuoc, String> {
+public abstract class ToaThuocDAO extends ClinicDAO<ToaThuocModel, String> {
 
-    public void insert(ToaThuoc model) {
+    public void insert(ToaThuocModel model) {
         String sql = "INSERT INTO TOATHUOC (MaTT, MaBN,	 TongTien, NgayXuatHD, MaND) VALUES (?, ?, ?, ?, ?)";
         XJdbc.update(sql,
                 model.getMaTT(),
@@ -30,7 +30,7 @@ public abstract class ToaThuocDAO extends ClinicDAO<ToaThuoc, String> {
         );
     }
 
-    public void update(ToaThuoc model) {
+    public void update(ToaThuocModel model) {
         String sql = "UPDATE TOATHUOC SET  MaBN=?, TongTien=?, NgayXuatHD=?, MaND=? WHERE MaTT=?";
         XJdbc.update(sql,
                 model.getMaBN(),
@@ -46,26 +46,26 @@ public abstract class ToaThuocDAO extends ClinicDAO<ToaThuoc, String> {
         XJdbc.update(sql, MaTT);
     }
 
-     public List<ToaThuoc> selectAll(){
+     public List<ToaThuocModel> selectAll(){
         String sql="SELECT * FROM ToaThuoc";
         return this.selectBySQL(sql);
     }
     
-    public ToaThuoc selectById(String manv){
+    public ToaThuocModel selectById(String manv){
         String sql="SELECT * FROM ToaThuoc WHERE MaTT=?";
-        List<ToaThuoc> list = this.selectBySQL(sql, manv);
+        List<ToaThuocModel> list = this.selectBySQL(sql, manv);
         return list.size() > 0 ? list.get(0) : null;
     }
   
-    protected List<ToaThuoc> selectBySQL(String sql, Object... args) {
-        List<ToaThuoc> list = new ArrayList<>();
+    protected List<ToaThuocModel> selectBySQL(String sql, Object... args) {
+        List<ToaThuocModel> list = new ArrayList<>();
         try {
             ResultSet rs = null;
             try {
                 rs = XJdbc.query(sql, args);
 //               (MaTT, MaBN,	 TongTien, NgayXuatHD, MaND) 
                 while (rs.next()) {
-                    ToaThuoc entity = new ToaThuoc();
+                    ToaThuocModel entity = new ToaThuocModel();
                     entity.setMaTT(rs.getString("MaTT"));
                     entity.setMaBN(rs.getString("MaBN"));
                     entity.setTongTien(rs.getString("TongTien"));

@@ -55,9 +55,6 @@ public class DangNhap extends javax.swing.JFrame {
                 return false;
             }
             Auth.user = nd;
-//            else {
-//                JOptionPane.showMessageDialog(this, "Dan thanh cong");
-//            }
             return nd.getMatKhau().equalsIgnoreCase(edtPassword.getText());
         }
         return false;
@@ -228,7 +225,6 @@ public class DangNhap extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã được ghi nhớ");
             }
             if (checkLogin()) {
-                
                 JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
                 new MainScreen().setVisible(true);
                 this.dispose();

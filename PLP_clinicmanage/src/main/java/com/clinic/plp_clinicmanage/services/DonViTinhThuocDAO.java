@@ -44,15 +44,15 @@ public abstract class DonViTinhThuocDAO extends ClinicDAO<DonViTinhThuoc, String
         return this.selectBySQL(sql);
     }
 
-    public DonViTinhThuoc selectById(String maND) {
-        String sql = "SELECT * FROM DONVITINH WHERE MaND=?";
-        List<DonViTinhThuoc> list = this.selectBySQL(sql, maND);
+    public DonViTinhThuoc selectById(String MaDVT) {
+        String sql = "SELECT * FROM DONVITINH WHERE MaDVT=?";
+        List<DonViTinhThuoc> list = this.selectBySQL(sql, MaDVT);
         return list.size() > 0 ? list.get(0) : null;
     }
 
-    public DonViTinhThuoc selectByUsername(String username) {
-        String sql = "SELECT * FROM NguoiDung WHERE TenTK like ?";
-        List<DonViTinhThuoc> list = this.selectBySQL(sql, username);
+    public DonViTinhThuoc selectByName(String name) {
+        String sql = "SELECT * FROM DONVITINH WHERE TENDVT like ?";
+        List<DonViTinhThuoc> list = this.selectBySQL(sql, name);
         return list.size() > 0 ? list.get(0) : null;
     }
 

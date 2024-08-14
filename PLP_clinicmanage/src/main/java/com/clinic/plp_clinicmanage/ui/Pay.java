@@ -5,7 +5,7 @@
 package com.clinic.plp_clinicmanage.ui;
 
 import com.clinic.plp_clinicmanage.models.NguoiDung;
-import com.clinic.plp_clinicmanage.models.ToaThuoc;
+import com.clinic.plp_clinicmanage.models.ToaThuocModel;
 import com.clinic.plp_clinicmanage.services.ToaThuocDAO;
 import com.clinic.plp_clinicmanage.utils.MsgBox;
 import java.util.List;
@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Pay extends javax.swing.JPanel {
 
-    private Iterable<ToaThuoc> toathuoc;
+    private Iterable<ToaThuocModel> toathuoc;
 
     /**
      * Creates new form Pay
@@ -33,8 +33,8 @@ public class Pay extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblThuoc.getModel();
         model.setRowCount(0);
         try {
-            List<ToaThuoc> list = ttdao.selectAll();
-            for (ToaThuoc cd : list) {
+            List<ToaThuocModel> list = ttdao.selectAll();
+            for (ToaThuocModel cd : list) {
                 Object[] row = {
                     cd.getMaTT(),
                     cd.getMaBN(),
@@ -50,7 +50,7 @@ public class Pay extends javax.swing.JPanel {
         String[] headers = new String[]{"MaTT", "MaBN", "TongTien", "NgayXuatHD" };
         DefaultTableModel model = new DefaultTableModel(headers, 0);
 
-        for (ToaThuoc item : this.toathuoc) {
+        for (ToaThuocModel item : this.toathuoc) {
             model.addRow(item.toObjectArray());
         }
         this.tblThuoc.setModel(model);

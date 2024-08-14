@@ -10,7 +10,7 @@ import java.util.Vector;
  *
  * @author LENOVO
  */
-public class ToaThuoc {
+public class ToaThuocModel {
 
     private String MaTT;
     private String MaBN;
@@ -19,10 +19,10 @@ public class ToaThuoc {
     private String MaND;
 
     //contructor
-    public ToaThuoc() {
+    public ToaThuocModel() {
     }
 
-    public ToaThuoc(String MaTT, String MaBN, String TongTien, String NgayXuatHD, String MaND) {
+    public ToaThuocModel(String MaTT, String MaBN, String TongTien, String NgayXuatHD, String MaND) {
         this.MaTT = MaTT;
         this.MaBN = MaBN;
         this.TongTien = TongTien;

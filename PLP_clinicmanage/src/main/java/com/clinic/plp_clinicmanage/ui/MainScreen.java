@@ -319,7 +319,11 @@ public class MainScreen extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_btn_List_PatientsActionPerformed
 
     private void menuSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSignOutActionPerformed
-        // TODO add your handling code here:
+        Auth.user = null;
+        this.dispose();
+        DangNhap dangNhap = new DangNhap();
+        dangNhap.setVisible(true); 
+        dangNhap.show();
     }//GEN-LAST:event_menuSignOutActionPerformed
 
     /**
@@ -490,10 +494,6 @@ public class MainScreen extends javax.swing.JFrame implements ActionListener {
             this.panelMainSpace.setVisible(false);
         }
         
-        Auth.user = null;
-        this.dispose();
-        DangNhap dangNhap = new DangNhap();
-        dangNhap.setVisible(true); 
-        dangNhap.show();
+
     }
 }

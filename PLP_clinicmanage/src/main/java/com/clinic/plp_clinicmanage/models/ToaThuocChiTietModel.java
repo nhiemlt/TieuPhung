@@ -8,7 +8,7 @@ package com.clinic.plp_clinicmanage.models;
  *
  * @author LENOVO
  */
-public class ToaThuocChiTiet {
+public class ToaThuocChiTietModel {
 
     private String MaTTCT;
     private String MaTT;
@@ -20,10 +20,10 @@ public class ToaThuocChiTiet {
     private String ThanhTien;
 
     //contructor
-    public ToaThuocChiTiet() {
+    public ToaThuocChiTietModel() {
     }
 
-    public ToaThuocChiTiet(String MaTTCT, String MaTT, String MaBN, String MaND, String MaThuoc, int SoLuong, String GiaBan, String ThanhTien) {
+    public ToaThuocChiTietModel(String MaTTCT, String MaTT, String MaBN, String MaND, String MaThuoc, int SoLuong, String GiaBan, String ThanhTien) {
         this.MaTTCT = MaTTCT;
         this.MaTT = MaTT;
         this.MaBN = MaBN;

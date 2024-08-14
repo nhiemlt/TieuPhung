@@ -5,7 +5,7 @@
 package com.clinic.plp_clinicmanage.services;
 
 
-import com.clinic.plp_clinicmanage.models.ToaThuocChiTiet;
+import com.clinic.plp_clinicmanage.models.ToaThuocChiTietModel;
 import com.clinic.plp_clinicmanage.utils.XJdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,8 +19,8 @@ import java.util.List;
 
 
 
-public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTiet, String>{
-    public void insert(ToaThuocChiTiet model) {
+public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTietModel, String>{
+    public void insert(ToaThuocChiTietModel model) {
         String sql = "INSERT INTO TOATHUOCCHITIET(MaTTCT, MaTT, MaBN , MaND, MaThuoc, SoLuong, GiaBan, ThanhTien) VALUES (?, ?, ?, ?, ?, ?, ?)";
         XJdbc.update(sql,
                 model.getMaTTCT(),
@@ -34,7 +34,7 @@ public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTiet, Stri
         );
     }
 
-    public void update(ToaThuocChiTiet model) {
+    public void update(ToaThuocChiTietModel model) {
         String sql = "UPDATE TOATHUOCCHITIET SET MaTT=?, MaBN=?, MaND=?, MaThuoc=?, SoLuong=?, GiaBan=?, ThanhTien=? WHERE MaTTCT=?";
         XJdbc.update(sql,
                 model.getMaTT(),
@@ -53,26 +53,26 @@ public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTiet, Stri
         XJdbc.update(sql, MaTTCT);
     }
 
-     public List<ToaThuocChiTiet> selectAll(){
+     public List<ToaThuocChiTietModel> selectAll(){
         String sql="SELECT * FROM TOATHUOCCHITIET";
         return this.selectBySQL(sql);
     }
     
-    public ToaThuocChiTiet selectById(String mattct){
+    public ToaThuocChiTietModel selectById(String mattct){
         String sql="SELECT * FROM TOATHUOCCHITIET WHERE MaTTCT=?";
-        List<ToaThuocChiTiet> list = this.selectBySQL(sql, mattct);
+        List<ToaThuocChiTietModel> list = this.selectBySQL(sql, mattct);
         return list.size() > 0 ? list.get(0) : null;
     }
    
-    protected List<ToaThuocChiTiet> selectBySQL(String sql, Object... args) {
-        List<ToaThuocChiTiet> list = new ArrayList<>();
+    protected List<ToaThuocChiTietModel> selectBySQL(String sql, Object... args) {
+        List<ToaThuocChiTietModel> list = new ArrayList<>();
         try {
             ResultSet rs = null;
             try {
                 rs = XJdbc.query(sql, args);
 //               (MaTTCT, MaTT, MaBN , MaND, MaThuoc, SoLuong, GiaBan, ThanhTien) 
                 while (rs.next()) {
-                    ToaThuocChiTiet entity = new ToaThuocChiTiet();
+                    ToaThuocChiTietModel entity = new ToaThuocChiTietModel();
                     entity.setMaTTCT(rs.getString("MaTTCT"));
                     entity.setMaTT(rs.getString("MaTT"));
                     entity.setMaBN(rs.getString("MaBN"));
