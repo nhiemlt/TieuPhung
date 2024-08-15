@@ -81,7 +81,7 @@ public class PrintPrescription implements Printable {
         g2d.drawString("Thành tiền", x, y);
 
         y += 20;
-        g2d.drawLine(x - 310, y, x + 130, y); // Đường ngang phía dưới tiêu đề cột
+        g2d.drawLine(x - 310, y, x + 180, y); // Đường ngang phía dưới tiêu đề cột
 
         // Vẽ thuốc
         for (ToaThuocChiTietModel chiTiet : chiTietList) {
