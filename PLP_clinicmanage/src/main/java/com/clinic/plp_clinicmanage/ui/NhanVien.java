@@ -10,6 +10,8 @@ import com.clinic.plp_clinicmanage.utils.MsgBox;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,7 +29,98 @@ public class NhanVien extends javax.swing.JPanel {
         initComponents();
         fillTable();
     }
+    public void setForm (NguoiDung nguoiDung){
+        edtMaNV.setText(nguoiDung.getMaND()+"");
+        edtTenNV.setText(nguoiDung.getTenND()+"");
+        edtEmail.setText(nguoiDung.getEmail());
+        edtSĐT.setText(nguoiDung.getSDT());
+          jblImage.setIcon(new ImageIcon(getClass().getResource("/com.clinicmanage_image/" + nguoiDung.getHinhAnh())));
 
+        Boolean gioiTinh = nguoiDung.isGioiTinh();
+        rbNam.setSelected(gioiTinh);
+        rbNu.setSelected(!gioiTinh);
+    }
+      public void clearForm() {
+        edtMaNV.setText("");
+        edtTenNV.setText("");
+        edtEmail.setText("");
+        edtSĐT.setText("");
+        edtGhiChu.setText("");
+       
+        rbNam.setSelected(true);
+    }
+      
+    public NguoiDung getForm() {
+        NguoiDung nguoiDung = new NguoiDung();
+        if (!edtMaNV.getText().isEmpty()) {
+              nguoiDung.setMaND(Integer.parseInt(edtMaNV.getText()));
+        }
+        nguoiDung.setTenND(edtTenNV.getText());
+        nguoiDung.setEmail(edtEmail.getText());
+        nguoiDung.setSDT(edtSĐT.getText());
+        nguoiDung.setHinhAnh(jblImage.getText());
+        if (rbNam.isSelected()) {
+            nguoiDung.setGioiTinh(true);
+        } else {
+            nguoiDung.setGioiTinh(false);
+        }
+
+        return nguoiDung;
+    }
+    public String kiemLoiThem() {
+        String err = "";
+        String emailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
+        String sdtRegex = "^(0[35789]\\d{8}|02\\d{9})$";
+        NguoiDung bs = getForm();
+        if (bs.getTenND().isEmpty() || bs.getTenND().isBlank()) {
+            err += "Tên không được bỏ trống!\n";
+        }
+
+        if (!bs.getEmail().matches(emailRegex)) {
+            err += "Email sai định dạng\n";
+        }
+        if (dao.selectByEmail(bs.getEmail()) != null) {
+            err += "Email đã tồn tại\n";
+
+        }
+
+        if (!bs.getSDT().matches(sdtRegex)) {
+            err += "Số điện thoại sai định dạng\n";
+        }
+        if (dao.selectBySDT(bs.getSDT()) != null) {
+            err += "Số điện thoại đã tồn tại\n";
+
+        }
+
+        if (bs.getEmail().isEmpty() || bs.getEmail().isBlank()) {
+            err += "Địa chỉ không được bỏ trống!\n";
+        }
+        if (bs.getChucVu().isEmpty() || bs.getChucVu().isBlank()) {
+            err += "Tiền sử bệnh không được bỏ trống!\n";
+        }
+        return err;
+    }
+    public String kiemLoiSua() {
+        String err = "";
+        String emailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
+        String sdtRegex = "^(0[35789]\\d{8}|02\\d{9})$";
+        NguoiDung nd = getForm();
+        if (nd.getTenND().isEmpty() || nd.getTenND().isBlank()) {
+            err += "Tên không được bỏ trống!\n";
+        }
+
+        if (!nd.getEmail().matches(emailRegex)) {
+            err += "Email sai định dạng\n";
+        }
+
+        if (!nd.getSDT().matches(sdtRegex)) {
+            err += "Số điện thoại sai định dạng\n";
+        }
+
+       
+
+        return err;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,7 +135,7 @@ public class NhanVien extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblStaff = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jblImage = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         edtTenNV = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -55,6 +148,8 @@ public class NhanVien extends javax.swing.JPanel {
         edtGhiChu = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         edtEmail = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        edtMaNV = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         btnAdd = new javax.swing.JToggleButton();
         btnUpdate = new javax.swing.JToggleButton();
@@ -78,11 +173,16 @@ public class NhanVien extends javax.swing.JPanel {
                 "Mã nhân viên", "Tên nhân viên", "Email", "SĐT"
             }
         ));
+        tblStaff.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblStaffMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblStaff);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin"));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_image/NV-LUAN.png"))); // NOI18N
+        jblImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_image/NV-LUAN.png"))); // NOI18N
 
         jLabel4.setText("Tên nhân viên:");
 
@@ -115,6 +215,8 @@ public class NhanVien extends javax.swing.JPanel {
 
         edtEmail.setText("luanhv@gmail.com");
 
+        jLabel8.setText("Mã nhân viên");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -126,7 +228,12 @@ public class NhanVien extends javax.swing.JPanel {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(30, 30, 30)
+                                    .addComponent(jLabel8)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(edtMaNV))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -137,7 +244,7 @@ public class NhanVien extends javax.swing.JPanel {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(edtEmail)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel3)))
+                            .addComponent(jblImage)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(33, 33, 33)
@@ -153,7 +260,10 @@ public class NhanVien extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel8)
+                            .addComponent(edtMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(edtTenNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
@@ -164,7 +274,7 @@ public class NhanVien extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(edtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel3))
+                    .addComponent(jblImage))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -180,6 +290,11 @@ public class NhanVien extends javax.swing.JPanel {
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_icon/Search.png"))); // NOI18N
 
         btnAdd.setText("Thêm");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Sửa");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -189,6 +304,11 @@ public class NhanVien extends javax.swing.JPanel {
         });
 
         btnDelete.setText("Xóa");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_icon/First.png"))); // NOI18N
 
@@ -274,7 +394,56 @@ public class NhanVien extends javax.swing.JPanel {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
+          String err = kiemLoiSua();
+        if (!err.isEmpty()) {
+            JOptionPane.showMessageDialog(this, err);
+        } else {
+            NguoiDung bn = getForm();
+            dao.update(bn);
+            JOptionPane.showMessageDialog(this, "Sửa thành công");
+            fillTable();
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+             if (edtMaNV.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn bênh nhân cần xoá!");
+        } else {
+            try {
+                int maBN = Integer.parseInt(edtMaNV.getText());
+                dao.delete(maBN);
+                JOptionPane.showMessageDialog(this, "Xoá thành cống!");
+                fillTable();
+                clearForm();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Không thể xoá bệnh nhân này!!");
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblStaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStaffMouseClicked
+        // TODO add your handling code here:
+           int selectedRow = tblStaff.getSelectedRow();
+        if (evt.getClickCount() == 2) {
+            int id = Integer.parseInt(tblStaff.getValueAt(selectedRow, 0).toString());
+            NguoiDung nguoiDung = dao.selectById(id);
+            setForm(nguoiDung);
+        }
+    }//GEN-LAST:event_tblStaffMouseClicked
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+          String err = kiemLoiThem();
+        if (!err.isEmpty()) {
+            JOptionPane.showMessageDialog(this, err);
+        } else {
+            NguoiDung nguoiDung = getForm();
+            dao.insert(nguoiDung);
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+            fillTable();
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -283,6 +452,7 @@ public class NhanVien extends javax.swing.JPanel {
     private javax.swing.JToggleButton btnUpdate;
     private javax.swing.JTextField edtEmail;
     private javax.swing.JTextArea edtGhiChu;
+    private javax.swing.JTextField edtMaNV;
     private javax.swing.JTextField edtSĐT;
     private javax.swing.JTextField edtTenNV;
     private javax.swing.JButton jButton1;
@@ -292,15 +462,16 @@ public class NhanVien extends javax.swing.JPanel {
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel jblImage;
     private javax.swing.JRadioButton rbNam;
     private javax.swing.JRadioButton rbNu;
     private javax.swing.JTable tblStaff;
