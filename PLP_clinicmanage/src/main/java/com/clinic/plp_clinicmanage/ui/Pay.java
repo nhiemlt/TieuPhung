@@ -16,6 +16,7 @@ import com.clinic.plp_clinicmanage.services.ToaThuocChiTietDAO;
 import com.clinic.plp_clinicmanage.services.ToaThuocDAO;
 import com.clinic.plp_clinicmanage.utils.Auth;
 import com.clinic.plp_clinicmanage.utils.MsgBox;
+import com.clinic.plp_clinicmanage.utils.PrintPrescription;
 import com.clinic.plp_clinicmanage.utils.XNumber;
 import java.awt.Color;
 import java.awt.Component;
@@ -26,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -206,11 +208,11 @@ public class Pay extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblLichSu.getModel();
         model.setRowCount(0);
         try {
-            List<ToaThuocModel> list = ttDao.selectAll();
+            List<ToaThuocModel> list = ttDao.selectAllDESC();
             for (ToaThuocModel cd : list) {
                 Object[] row = {
                     cd.getMaTT(),
-                    cd.getMaBN(),
+                    bnDAO.selectById(cd.getMaBN()).getTenBN(),
                     cd.getTongTien(),
                     cd.getNgayXuatHD()
                 };
@@ -295,33 +297,77 @@ public class Pay extends javax.swing.JPanel {
         return true;
     }
 
-    public int themToaThuoc() {
+    public ToaThuocModel themToaThuoc() {
         String keyword = txtKeyword.getText();
         BenhNhanModel bn = bnDAO.selectByEmail(keyword) == null ? bnDAO.selectBySDT(keyword) : bnDAO.selectByEmail(keyword);
         ToaThuocModel tt = new ToaThuocModel();
         tt.setMaBN(bn.getMaBN());
         tt.setMaND(Auth.user.getMaND());
-        tt.setNgayXuatHD(new Date() + "");
-        tt.setTongTien(lblTongTien.getText());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = sdf.format(new Date());
+        tt.setNgayXuatHD(formattedDate);
+        tt.setTongTien(xn.parseFloat(lblTongTien.getText()));
         try {
             ttDao.insert(tt);
             List<ToaThuocModel> allRecords = ttDao.selectAll();
             if (!allRecords.isEmpty()) {
-                return allRecords.get(allRecords.size() - 1).getMaTT();
+                return allRecords.get(allRecords.size() - 1);
             } else {
-                return 0;
+                return null;
             }
         } catch (Exception e) {
-            return 0;
+            System.out.println(e);
+            return null;
         }
+    }
 
+    public List<ToaThuocChiTietModel> themChiTietToaThuoc(ToaThuocModel toaThuoc) {
+        List<ToaThuocChiTietModel> ttctList = new ArrayList<>();
+        for (int i = 0; i < tblGioHang.getRowCount(); i++) {
+            int maBN = toaThuoc.getMaTT();
+            int maND = toaThuoc.getMaBN();
+            int maThuoc = Integer.parseInt(tblGioHang.getValueAt(i, 0).toString());
+            int soLuong = Integer.parseInt(tblGioHang.getValueAt(i, 3).toString());
+            float giaBan = Float.parseFloat(tblGioHang.getValueAt(i, 2).toString());
+            float thanhTien = soLuong * giaBan;
+
+            ToaThuocChiTietModel ttct = new ToaThuocChiTietModel();
+            ThuocModel thuoc = tDao.selectById(maThuoc);
+            if (thuoc.getSoLuong() < soLuong) {
+                JOptionPane.showMessageDialog(this, "Thuốc " + thuoc.getTenThuoc() + "không còn đủ để bán, vui lòng chọn thuốc khác hoặc thay đổi số lượng!");
+                tblGioHang.setValueAt(soLuong, i, 3);
+                break;
+            }
+            ttct.setMaTT(toaThuoc.getMaTT());
+            ttct.setMaBN(maBN);
+            ttct.setMaND(maND);
+            ttct.setMaThuoc(maThuoc);
+            ttct.setSoLuong(soLuong);
+            ttct.setGiaBan(giaBan);
+            ttct.setThanhTien(thanhTien);
+
+            ttctDao.insert(ttct);
+            ttctList.add(ttct);
+        }
+        return ttctList;
     }
 
     public void thanhToan() {
         if (checkThanhToan()) {
             try {
-                
+                ToaThuocModel toaThuoc = themToaThuoc();
+                if (toaThuoc == null) {
+                    JOptionPane.showMessageDialog(this, "Thêm toa thuốc không thành công");
+                } else {
+                    List<ToaThuocChiTietModel> list = themChiTietToaThuoc(toaThuoc);
+                    JOptionPane.showMessageDialog(this, "Thêm toa thuốc thành công!!"); 
+                    fillTableLichSu();
+                    PrintPrescription printBill = new PrintPrescription(toaThuoc, list);
+                    printBill.printPrescription();
+                }
             } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Có lỗi sảy ra khi thêm toa thuốc");
             }
         }
     }
@@ -581,6 +627,11 @@ public class Pay extends javax.swing.JPanel {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_image/QLHĐ.jpg"))); // NOI18N
 
         jButton1.setText("Thêm thuốc");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_icon/Search.png"))); // NOI18N
         jButton4.setText("Tìm kiếm toa thuốc");
@@ -773,6 +824,10 @@ public class Pay extends javax.swing.JPanel {
 
         tinhTien();
     }//GEN-LAST:event_tblGioHangMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        thanhToan();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

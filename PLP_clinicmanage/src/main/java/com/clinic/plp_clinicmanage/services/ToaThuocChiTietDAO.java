@@ -21,9 +21,8 @@ import java.util.List;
 
 public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTietModel, Integer>{
     public void insert(ToaThuocChiTietModel model) {
-        String sql = "INSERT INTO TOATHUOCCHITIET(MaTTCT, MaTT, MaBN , MaND, MaThuoc, SoLuong, GiaBan, ThanhTien) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO TOATHUOCCHITIET(MaTT, MaBN , MaND, MaThuoc, SoLuong, GiaBan, ThanhTien) VALUES (?, ?, ?, ?, ?, ?, ?)";
         XJdbc.update(sql,
-                model.getMaTTCT(),
                 model.getMaTT(),
                 model.getMaBN(),
                 model.getMaND(),
@@ -79,8 +78,8 @@ public abstract class ToaThuocChiTietDAO extends ClinicDAO<ToaThuocChiTietModel,
                     entity.setMaND(rs.getInt("MaND"));
                     entity.setMaThuoc(rs.getInt("MaThuoc"));
                     entity.setSoLuong(rs.getInt("SoLuong"));
-                    entity.setGiaBan(rs.getString("GiaBan"));
-                    entity.setThanhTien(rs.getString("ThanhTien"));
+                    entity.setGiaBan(rs.getFloat("GiaBan"));
+                    entity.setThanhTien(rs.getFloat("ThanhTien"));
                     list.add(entity);
                 }
             } finally {

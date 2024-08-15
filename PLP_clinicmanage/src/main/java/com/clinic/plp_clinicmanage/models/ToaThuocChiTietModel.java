@@ -16,14 +16,13 @@ public class ToaThuocChiTietModel {
     private Integer MaND;
     private Integer MaThuoc;
     private int SoLuong;
-    private String GiaBan;
-    private String ThanhTien;
+    private double GiaBan;
+    private double ThanhTien;
 
-    //contructor
     public ToaThuocChiTietModel() {
     }
 
-    public ToaThuocChiTietModel(Integer MaTTCT, Integer MaTT, Integer MaBN, Integer MaND, Integer MaThuoc, int SoLuong, String GiaBan, String ThanhTien) {
+    public ToaThuocChiTietModel(Integer MaTTCT, Integer MaTT, Integer MaBN, Integer MaND, Integer MaThuoc, int SoLuong, double GiaBan, double ThanhTien) {
         this.MaTTCT = MaTTCT;
         this.MaTT = MaTT;
         this.MaBN = MaBN;
@@ -34,7 +33,6 @@ public class ToaThuocChiTietModel {
         this.ThanhTien = ThanhTien;
     }
 
-    // getter và setter
     public Integer getMaTTCT() {
         return MaTTCT;
     }
@@ -83,20 +81,19 @@ public class ToaThuocChiTietModel {
         this.SoLuong = SoLuong;
     }
 
-    public String getGiaBan() {
+    public double getGiaBan() {
         return GiaBan;
     }
 
-    public void setGiaBan(String GiaBan) {
+    public void setGiaBan(double GiaBan) {
         this.GiaBan = GiaBan;
     }
 
-    public String getThanhTien() {
+    public double getThanhTien() {
         return ThanhTien;
     }
 
-    public void setThanhTien(String ThanhTien) {
+    public void setThanhTien(double ThanhTien) {
         this.ThanhTien = ThanhTien;
     }
-
 }

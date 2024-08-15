@@ -14,7 +14,7 @@ public class ToaThuocModel {
 
     private Integer MaTT;
     private Integer MaBN;
-    private String TongTien;
+    private Float TongTien;
     private String NgayXuatHD;
     private Integer MaND;
 
@@ -22,7 +22,7 @@ public class ToaThuocModel {
     public ToaThuocModel() {
     }
 
-    public ToaThuocModel(Integer MaTT, Integer MaBN, String TongTien, String NgayXuatHD, Integer MaND) {
+    public ToaThuocModel(Integer MaTT, Integer MaBN, Float TongTien, String NgayXuatHD, Integer MaND) {
         this.MaTT = MaTT;
         this.MaBN = MaBN;
         this.TongTien = TongTien;
@@ -47,11 +47,11 @@ public class ToaThuocModel {
         this.MaBN = MaBN;
     }
 
-    public String getTongTien() {
+    public Float getTongTien() {
         return TongTien;
     }
 
-    public void setTongTien(String TongTien) {
+    public void setTongTien(Float TongTien) {
         this.TongTien = TongTien;
     }
 

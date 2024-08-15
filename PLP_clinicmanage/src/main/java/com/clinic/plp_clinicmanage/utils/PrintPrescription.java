@@ -30,6 +30,8 @@ public class PrintPrescription implements Printable {
     public PrintPrescription(ToaThuocModel toaThuoc, List<ToaThuocChiTietModel> chiTietList) {
         this.toaThuoc = toaThuoc;
         this.chiTietList = chiTietList;
+        this.bnDAO = new BenhNhanDAO() {} ; 
+        this.thuocDAO = new ThuocDAO(){}; 
     }
 
     @Override
@@ -97,9 +99,9 @@ public class PrintPrescription implements Printable {
             x += 30;
             g2d.drawString(thuoc.getTenThuoc(), x, y); // tên thuốc
             x += 150;
-            g2d.drawString(xn.formatDecimal(Integer.parseInt(chiTiet.getGiaBan())), x, y); // giá bán
+            g2d.drawString(xn.formatDecimal(Float.parseFloat(chiTiet.getGiaBan() + "")), x, y); // giá bán
             x += 130;
-            g2d.drawString(xn.formatDecimal(Integer.parseInt(chiTiet.getThanhTien())), x, y); // Thành tiền
+            g2d.drawString(xn.formatDecimal(Integer.parseInt(chiTiet.getThanhTien() + "")), x, y); // Thành tiền
         }
 
         // Vẽ tổng số tiền
@@ -110,7 +112,7 @@ public class PrintPrescription implements Printable {
         y += 20;
         Font fontTongTien = new Font("Arial", Font.BOLD, 14); // Chọn kích thước font mới
         g2d.setFont(fontTongTien);
-        g2d.drawString("Tổng Tiền: " + xn.formatDecimal(Integer.parseInt(toaThuoc.getTongTien())) + " VNĐ", x, y);
+        g2d.drawString("Tổng Tiền: " + xn.formatDecimal(Float.parseFloat(toaThuoc.getTongTien() + "")) + " VNĐ", x, y);
 
         // Vẽ chân trang
         y += 30;

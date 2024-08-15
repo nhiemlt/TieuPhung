@@ -4,7 +4,6 @@
  */
 package com.clinic.plp_clinicmanage.services;
 
-
 import com.clinic.plp_clinicmanage.models.ToaThuocModel;
 import com.clinic.plp_clinicmanage.utils.XJdbc;
 import java.sql.ResultSet;
@@ -16,13 +15,11 @@ import java.util.List;
  *
  * @author LENOVO
  */
-
 public abstract class ToaThuocDAO extends ClinicDAO<ToaThuocModel, Integer> {
 
     public void insert(ToaThuocModel model) {
-        String sql = "INSERT INTO TOATHUOC (MaTT, MaBN,	 TongTien, NgayXuatHD, MaND) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO TOATHUOC (MaBN, TongTien, NgayXuatHD, MaND) VALUES (?, ?, ?, ?)";
         XJdbc.update(sql,
-                model.getMaTT(),
                 model.getMaBN(),
                 model.getTongTien(),
                 model.getNgayXuatHD(),
@@ -46,17 +43,22 @@ public abstract class ToaThuocDAO extends ClinicDAO<ToaThuocModel, Integer> {
         XJdbc.update(sql, MaTT);
     }
 
-     public List<ToaThuocModel> selectAll(){
-        String sql="SELECT * FROM ToaThuoc";
+    public List<ToaThuocModel> selectAll() {
+        String sql = "SELECT * FROM ToaThuoc";
         return this.selectBySQL(sql);
     }
-    
-    public ToaThuocModel selectById(Integer manv){
-        String sql="SELECT * FROM ToaThuoc WHERE MaTT=?";
+
+    public List<ToaThuocModel> selectAllDESC() {
+        String sql = "SELECT * FROM ToaThuoc ORDER BY MaTT DESC";
+        return this.selectBySQL(sql);
+    }
+
+    public ToaThuocModel selectById(Integer manv) {
+        String sql = "SELECT * FROM ToaThuoc WHERE MaTT=?";
         List<ToaThuocModel> list = this.selectBySQL(sql, manv);
         return list.size() > 0 ? list.get(0) : null;
     }
-  
+
     protected List<ToaThuocModel> selectBySQL(String sql, Object... args) {
         List<ToaThuocModel> list = new ArrayList<>();
         try {
@@ -68,10 +70,10 @@ public abstract class ToaThuocDAO extends ClinicDAO<ToaThuocModel, Integer> {
                     ToaThuocModel entity = new ToaThuocModel();
                     entity.setMaTT(rs.getInt("MaTT"));
                     entity.setMaBN(rs.getInt("MaBN"));
-                    entity.setTongTien(rs.getString("TongTien"));
+                    entity.setTongTien(rs.getFloat("TongTien"));
                     entity.setNgayXuatHD(rs.getString("NgayXuatHD"));
                     entity.setMaND(rs.getInt("MaND"));
-                     list.add(entity);
+                    list.add(entity);
                 }
             } finally {
                 if (rs != null) {

@@ -32,6 +32,15 @@ public class XNumber {
         }
         return 0;
     }
+    
+    public static float parseFloat(String formattedNumber) {
+        try {
+            return decimalFormat.parse(formattedNumber).floatValue();
+        } catch (ParseException ex) {
+            Logger.getLogger(XNumber.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 
     public static int parseInt(String formattedNumber) {
         try {
