@@ -68,8 +68,8 @@ public class SendMailService {
 
     public void sendOTP(String emailTo) {
         String otp = String.valueOf(generateRandomOTP());
-        String username = "luanb2207599@student.ctu.edu.vn";
-        String password = "nori xiyt omcm pekw";
+        String username = "plphethongquanliphongkham@gmail.com";
+        String password = "kdfe trau ogzp iyww";
 
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
