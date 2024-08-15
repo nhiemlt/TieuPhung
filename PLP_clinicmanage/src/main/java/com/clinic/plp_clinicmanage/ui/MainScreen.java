@@ -88,6 +88,9 @@ public class MainScreen extends javax.swing.JFrame implements ActionListener {
         menuExit = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setMinimumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
 
         jPanel1.setBackground(new java.awt.Color(0, 102, 102));
 
@@ -233,7 +236,7 @@ public class MainScreen extends javax.swing.JFrame implements ActionListener {
                 .addComponent(btn_List_Medicine)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_AddNew_Pointment)
-                .addContainerGap(249, Short.MAX_VALUE))
+                .addContainerGap(652, Short.MAX_VALUE))
         );
 
         panelMainSpace.setLayout(new java.awt.BorderLayout());
