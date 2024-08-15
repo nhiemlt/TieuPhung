@@ -128,6 +128,9 @@
         <Component class="javax.swing.JTextField" name="edtUsername">
         </Component>
         <Component class="javax.swing.JPasswordField" name="edtPassword">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="edtPasswordActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

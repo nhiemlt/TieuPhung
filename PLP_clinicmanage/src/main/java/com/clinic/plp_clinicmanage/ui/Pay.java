@@ -4,12 +4,42 @@
  */
 package com.clinic.plp_clinicmanage.ui;
 
+import com.clinic.plp_clinicmanage.models.BenhNhanModel;
 import com.clinic.plp_clinicmanage.models.NguoiDung;
+import com.clinic.plp_clinicmanage.models.ThuocModel;
+import com.clinic.plp_clinicmanage.models.ToaThuocChiTietModel;
 import com.clinic.plp_clinicmanage.models.ToaThuocModel;
+import com.clinic.plp_clinicmanage.services.BenhNhanDAO;
+import com.clinic.plp_clinicmanage.services.NguoiDungDAO;
+import com.clinic.plp_clinicmanage.services.ThuocDAO;
+import com.clinic.plp_clinicmanage.services.ToaThuocChiTietDAO;
 import com.clinic.plp_clinicmanage.services.ToaThuocDAO;
+import com.clinic.plp_clinicmanage.utils.Auth;
 import com.clinic.plp_clinicmanage.utils.MsgBox;
+import com.clinic.plp_clinicmanage.utils.XNumber;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -18,42 +48,282 @@ import javax.swing.table.DefaultTableModel;
 public class Pay extends javax.swing.JPanel {
 
     private Iterable<ToaThuocModel> toathuoc;
+    ToaThuocDAO ttDao = new ToaThuocDAO() {
+    };
+    ThuocDAO tDao = new ThuocDAO() {
+    };
+    ToaThuocChiTietDAO ttctDao = new ToaThuocChiTietDAO() {
+    };
+    BenhNhanDAO bnDAO = new BenhNhanDAO() {
+    };
+    NguoiDungDAO ndDAO = new NguoiDungDAO() {
+    };
 
-    /**
-     * Creates new form Pay
-     */
+    ArrayList<ToaThuocChiTietModel> gioHang;
+    ToaThuocModel toaThuoc;
+    XNumber xn = new XNumber();
+    int row = -1;
+
+    private class CircularButtonRenderer extends JButton implements TableCellRenderer {
+
+        private ImageIcon icon;
+        private int selectedRow = -1;
+
+        public CircularButtonRenderer() {
+            setOpaque(true);
+            setBorderPainted(false);
+            setContentAreaFilled(false);
+
+            try {
+                // Load the icon from the resources
+                icon = new ImageIcon(getClass().getResource("/com.clinicmanage_icon/delete_1.png"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (row == selectedRow) {
+                setBackground(Color.BLACK);
+            } else {
+                setBackground(table.getBackground());
+            }
+
+            setIcon(icon);
+            setText((value == null) ? "" : value.toString());
+            return this;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+        }
+    }
+
+    private class CircularButtonEditor extends DefaultCellEditor {
+
+        private JButton button;
+
+        public CircularButtonEditor(JTextField textField) {
+            super(textField);
+
+            button = new JButton();
+            try {
+                // Load the icon from the resources
+                ImageIcon icon = new ImageIcon(getClass().getResource("/com.clinicmanage_icon/delete_1.png"));
+                button.setIcon(icon);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Point clickPoint = MouseInfo.getPointerInfo().getLocation();
+                    SwingUtilities.convertPointFromScreen(clickPoint, tblGioHang);
+
+                    int row = tblGioHang.rowAtPoint(clickPoint);
+
+                    if (row >= 0 && row < tblGioHang.getRowCount()) {
+                        DefaultTableModel model = (DefaultTableModel) tblGioHang.getModel();
+
+                        // Kết thúc sự kiện chỉnh sửa nếu đang có
+                        if (tblGioHang.isEditing()) {
+                            tblGioHang.getCellEditor().stopCellEditing();
+                        }
+
+                        model.removeRow(row);
+                        tinhTien();
+                    }
+                }
+            });
+
+            button.setBorderPainted(false);
+            button.setContentAreaFilled(false);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            button.setText((value == null) ? "" : value.toString());
+            return button;
+        }
+    }
+
+    public void tinhTien() {
+        double tongTien = 0;
+        for (int i = 0; i < tblGioHang.getRowCount(); i++) {
+            try {
+                int a = Integer.parseInt(tblGioHang.getValueAt(i, 3) + "");
+            } catch (Exception e) {
+                tblGioHang.setValueAt(1, i, 3);
+            }
+            int soLuong = Integer.parseInt(tblGioHang.getValueAt(i, 3) + "");
+            double gia = (xn.parseDecimal(tblGioHang.getValueAt(i, 2) + "")) * soLuong;
+            tongTien += gia;
+        }
+        lblTongTien.setText(xn.formatDecimal(tongTien));
+    }
+
     public Pay() {
         initComponents();
-        this.fillTable();
-        
+        fillTableLichSu();
+        fillTablleThuoc();
+        initForm();
     }
-    public void fillTable() {
-         ToaThuocDAO ttdao = new ToaThuocDAO() {
-        };
-        DefaultTableModel model = (DefaultTableModel) tblThuoc.getModel();
+
+    public void initForm() {
+        NguoiDung nd = Auth.user;
+        txtTenBS.setText(nd.getTenND());
+        txtChucVu.setText(nd.getChucVu());
+        tblGioHang.getColumnModel().getColumn(4).setCellRenderer(new CircularButtonRenderer());
+        tblGioHang.getColumnModel().getColumn(4).setCellEditor(new CircularButtonEditor(new JTextField()));
+        tblGioHang.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
+            {
+                setHorizontalAlignment(SwingConstants.LEFT);
+            }
+        });
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setBackground(new Color(49, 0, 158));
+        headerRenderer.setForeground(Color.WHITE);
+
+        for (int i = 0; i < tblGioHang.getColumnCount(); i++) {
+            tblGioHang.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
+        }
+
+        tblGioHang.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Point p = e.getPoint();
+                row = tblGioHang.rowAtPoint(p);
+                tblGioHang.repaint();
+            }
+        });
+    }
+
+    public void fillTableLichSu() {
+
+        DefaultTableModel model = (DefaultTableModel) tblLichSu.getModel();
         model.setRowCount(0);
         try {
-            List<ToaThuocModel> list = ttdao.selectAll();
+            List<ToaThuocModel> list = ttDao.selectAll();
             for (ToaThuocModel cd : list) {
                 Object[] row = {
                     cd.getMaTT(),
                     cd.getMaBN(),
                     cd.getTongTien(),
-                    cd.getNgayXuatHD(),};
-               
+                    cd.getNgayXuatHD()
+                };
+                model.addRow(row);
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }
-     public void updateTable() {
-        String[] headers = new String[]{"MaTT", "MaBN", "TongTien", "NgayXuatHD" };
+
+    public void fillTablleThuoc() {
+        String name = txtSearch.getText();
+        DefaultTableModel model = (DefaultTableModel) tblThuoc.getModel();
+        model.setRowCount(0);
+        try {
+            List<ThuocModel> list = tDao.selectByName(name);
+            for (ThuocModel t : list) {
+                Object[] row = {
+                    t.getMaThuoc(),
+                    t.getTenThuoc(),
+                    t.getCongDung()
+                };
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
+    public void setForm() {
+        String keyword = txtKeyword.getText();
+        BenhNhanModel bn = bnDAO.selectByEmail(keyword) == null ? bnDAO.selectBySDT(keyword) : bnDAO.selectByEmail(keyword);
+        if (bn == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin bệnh nhân phù hợp!");
+            txtKeyword.setText("");
+            txtTenBN.setText("");
+        } else {
+            txtTenBN.setText(bn.getTenBN());
+        }
+    }
+
+    public void updateTable() {
+        String[] headers = new String[]{"MaTT", "MaBN", "TongTien", "NgayXuatHD"};
         DefaultTableModel model = new DefaultTableModel(headers, 0);
 
         for (ToaThuocModel item : this.toathuoc) {
             model.addRow(item.toObjectArray());
         }
-        this.tblThuoc.setModel(model);
+        this.tblLichSu.setModel(model);
+    }
+
+    public void themGioHang(ThuocModel thuoc) {
+        int size = tblGioHang.getRowCount();
+        for (int i = 0; i < size; i++) {
+            if (tblGioHang.getValueAt(i, 0).toString().equals(thuoc.getMaThuoc() + "")) {
+                int sl = Integer.parseInt(tblGioHang.getValueAt(i, 3).toString());
+                tblGioHang.setValueAt(sl + 1, i, 3);
+                tinhTien();
+                return;
+            }
+        }
+        DefaultTableModel model = (DefaultTableModel) tblGioHang.getModel();
+        Object[] row = {
+            thuoc.getMaThuoc(),
+            thuoc.getTenThuoc(),
+            thuoc.getGiaTien(),
+            1
+        };
+        model.addRow(row);
+        tinhTien();
+    }
+
+    public boolean checkThanhToan() {
+        if (txtTenBN.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin bệnh nhân");
+            return false;
+        }
+        if (tblGioHang.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Chọn thuốc cần mua");
+            return false;
+        }
+        return true;
+    }
+
+    public int themToaThuoc() {
+        String keyword = txtKeyword.getText();
+        BenhNhanModel bn = bnDAO.selectByEmail(keyword) == null ? bnDAO.selectBySDT(keyword) : bnDAO.selectByEmail(keyword);
+        ToaThuocModel tt = new ToaThuocModel();
+        tt.setMaBN(bn.getMaBN());
+        tt.setMaND(Auth.user.getMaND());
+        tt.setNgayXuatHD(new Date() + "");
+        tt.setTongTien(lblTongTien.getText());
+        try {
+            ttDao.insert(tt);
+            List<ToaThuocModel> allRecords = ttDao.selectAll();
+            if (!allRecords.isEmpty()) {
+                return allRecords.get(allRecords.size() - 1).getMaTT();
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            return 0;
+        }
+
+    }
+
+    public void thanhToan() {
+        if (checkThanhToan()) {
+            try {
+                
+            } catch (Exception e) {
+            }
+        }
     }
 
     /**
@@ -70,21 +340,21 @@ public class Pay extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jblTenBN = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        edtTenBN = new javax.swing.JTextField();
+        txtTenBN = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblGioHang = new javax.swing.JTable();
         jblTenBS = new javax.swing.JLabel();
-        edtTenBS = new javax.swing.JTextField();
+        txtTenBS = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        edtSDT = new javax.swing.JTextField();
+        txtKeyword = new javax.swing.JTextField();
         jblSDT = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtChucVu = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        lblTongTien = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         btnIn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -93,12 +363,12 @@ public class Pay extends javax.swing.JPanel {
         jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblThuoc = new javax.swing.JTable();
-        jTextField3 = new javax.swing.JTextField();
+        tblLichSu = new javax.swing.JTable();
+        txtSearch = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblThuoc = new javax.swing.JTable();
 
         jLabel8.setText("jLabel8");
 
@@ -117,38 +387,57 @@ public class Pay extends javax.swing.JPanel {
         jLabel5.setForeground(new java.awt.Color(0, 102, 102));
         jLabel5.setText("TOA THUỐC");
 
-        edtTenBN.setEditable(false);
-        edtTenBN.addActionListener(new java.awt.event.ActionListener() {
+        txtTenBN.setEditable(false);
+        txtTenBN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtTenBNActionPerformed(evt);
+                txtTenBNActionPerformed(evt);
             }
         });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblGioHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Mã thuốc", "Tên thuốc", "Số lượng", ""
+                "Mã", "Tên thuốc", "Giá bán", "SL", ""
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, false
+                false, false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable2);
+        tblGioHang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblGioHangMouseClicked(evt);
+            }
+        });
+        tblGioHang.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblGioHangKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblGioHangKeyReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblGioHang);
+        if (tblGioHang.getColumnModel().getColumnCount() > 0) {
+            tblGioHang.getColumnModel().getColumn(0).setMaxWidth(30);
+            tblGioHang.getColumnModel().getColumn(2).setMinWidth(100);
+            tblGioHang.getColumnModel().getColumn(2).setMaxWidth(100);
+            tblGioHang.getColumnModel().getColumn(3).setMinWidth(50);
+            tblGioHang.getColumnModel().getColumn(3).setPreferredWidth(50);
+            tblGioHang.getColumnModel().getColumn(3).setMaxWidth(50);
+            tblGioHang.getColumnModel().getColumn(4).setMaxWidth(20);
+        }
 
         jblTenBS.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jblTenBS.setText("Tên bác sĩ:");
 
-        edtTenBS.setEditable(false);
+        txtTenBS.setEditable(false);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 102, 102));
@@ -167,21 +456,27 @@ public class Pay extends javax.swing.JPanel {
         jLabel7.setForeground(new java.awt.Color(0, 102, 102));
         jLabel7.setText("VND");
 
+        txtKeyword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtKeywordActionPerformed(evt);
+            }
+        });
+
         jblSDT.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jblSDT.setText("Sdt/ Email:");
 
         jLabel9.setText("Chức vụ bác sĩ:");
 
-        jTextField2.setEditable(false);
+        txtChucVu.setEditable(false);
 
         jLabel10.setFont(new java.awt.Font("Open Sans ExtraBold", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 102, 102));
         jLabel10.setText("Tổng tiền:");
 
-        jLabel11.setFont(new java.awt.Font("Open Sans ExtraBold", 1, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("2.130.500");
+        lblTongTien.setFont(new java.awt.Font("Open Sans ExtraBold", 1, 24)); // NOI18N
+        lblTongTien.setForeground(new java.awt.Color(0, 102, 102));
+        lblTongTien.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTongTien.setText("0");
 
         jLabel12.setFont(new java.awt.Font("Open Sans ExtraBold", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 102, 102));
@@ -216,17 +511,17 @@ public class Pay extends javax.swing.JPanel {
                                     .addComponent(jblSDT))
                                 .addGap(9, 9, 9)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(edtTenBS, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(edtTenBN)
-                                    .addComponent(edtSDT)
-                                    .addComponent(jTextField2)))
+                                    .addComponent(txtTenBS, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtTenBN)
+                                    .addComponent(txtKeyword)
+                                    .addComponent(txtChucVu)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel12))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -249,18 +544,18 @@ public class Pay extends javax.swing.JPanel {
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edtSDT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtKeyword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jblSDT))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edtTenBN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTenBN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jblTenBN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(edtTenBS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTenBS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jblTenBS)
@@ -270,7 +565,7 @@ public class Pay extends javax.swing.JPanel {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -292,26 +587,31 @@ public class Pay extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Lịch sử toa thuốc"));
 
-        tblThuoc.setModel(new javax.swing.table.DefaultTableModel(
+        tblLichSu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Mã toa thuốc", "Tên bệnh nhân", "Ngày xuất toa thuốc"
+                "Mã", "Tên bệnh nhân", "Tổng tiền", "Thời gian"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblThuoc);
+        jScrollPane1.setViewportView(tblLichSu);
+        if (tblLichSu.getColumnModel().getColumnCount() > 0) {
+            tblLichSu.getColumnModel().getColumn(0).setMinWidth(50);
+            tblLichSu.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblLichSu.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -329,12 +629,18 @@ public class Pay extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
+
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_icon/Search.png"))); // NOI18N
         jButton2.setText("Tìm kiếm thuốc");
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Gợi ý thuốc"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblThuoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -353,7 +659,12 @@ public class Pay extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable1);
+        tblThuoc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblThuocMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblThuoc);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -383,7 +694,7 @@ public class Pay extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton2))
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -413,7 +724,7 @@ public class Pay extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton2))
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -431,22 +742,46 @@ public class Pay extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void edtTenBNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtTenBNActionPerformed
+    private void txtTenBNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenBNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_edtTenBNActionPerformed
+    }//GEN-LAST:event_txtTenBNActionPerformed
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        fillTablleThuoc();
+    }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void txtKeywordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKeywordActionPerformed
+        setForm();
+    }//GEN-LAST:event_txtKeywordActionPerformed
+
+    private void tblThuocMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblThuocMouseClicked
+        int selectedRow = tblThuoc.getSelectedRow();
+        int id = Integer.parseInt(tblThuoc.getValueAt(selectedRow, 0).toString());
+        ThuocModel thuoc = tDao.selectById(id);
+        themGioHang(thuoc);
+    }//GEN-LAST:event_tblThuocMouseClicked
+
+    private void tblGioHangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblGioHangKeyPressed
+
+    }//GEN-LAST:event_tblGioHangKeyPressed
+
+    private void tblGioHangKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblGioHangKeyReleased
+        tinhTien();
+    }//GEN-LAST:event_tblGioHangKeyReleased
+
+    private void tblGioHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGioHangMouseClicked
+
+        tinhTien();
+    }//GEN-LAST:event_tblGioHangMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIn;
-    private javax.swing.JTextField edtSDT;
-    private javax.swing.JTextField edtTenBN;
-    private javax.swing.JTextField edtTenBS;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -462,14 +797,18 @@ public class Pay extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel jblSDT;
     private javax.swing.JLabel jblTenBN;
     private javax.swing.JLabel jblTenBS;
+    private javax.swing.JLabel lblTongTien;
+    private javax.swing.JTable tblGioHang;
+    private javax.swing.JTable tblLichSu;
     private javax.swing.JTable tblThuoc;
+    private javax.swing.JTextField txtChucVu;
+    private javax.swing.JTextField txtKeyword;
+    private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtTenBN;
+    private javax.swing.JTextField txtTenBS;
     // End of variables declaration//GEN-END:variables
 }

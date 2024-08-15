@@ -95,6 +95,12 @@ public class DangNhap extends javax.swing.JFrame {
 
         jLabel3.setText("Mật khẩu:");
 
+        edtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                edtPasswordActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -217,6 +223,7 @@ public class DangNhap extends javax.swing.JFrame {
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         clearForm();
+        System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnSinginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSinginActionPerformed
@@ -240,6 +247,21 @@ public class DangNhap extends javax.swing.JFrame {
         qmk.setVisible(true);
         qmk.show();
     }//GEN-LAST:event_jLabel4MouseClicked
+
+    private void edtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtPasswordActionPerformed
+        if (checkValue()) {
+            if (cbPassword.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã được ghi nhớ");
+            }
+            if (checkLogin()) {
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
+                new MainScreen().setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Đăng nhập thất bại");
+            }
+        }       
+    }//GEN-LAST:event_edtPasswordActionPerformed
 
     /**
      * @param args the command line arguments

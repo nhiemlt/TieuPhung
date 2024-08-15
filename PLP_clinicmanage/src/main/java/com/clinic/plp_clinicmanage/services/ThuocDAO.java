@@ -57,6 +57,13 @@ public abstract class ThuocDAO extends ClinicDAO<ThuocModel, Integer> {
         return this.selectBySQL(sql);
     }
 
+public List<ThuocModel> selectByName(String name) {
+    String sql = "SELECT * FROM THUOC WHERE TenThuoc LIKE ?";
+    String param = "%" + name + "%";
+    List<ThuocModel> list = this.selectBySQL(sql, param);
+    return list;
+}
+
     public ThuocModel selectById(Integer MaThuoc) {
         String sql = "SELECT * FROM Thuoc WHERE MaThuoc=?";
         List<ThuocModel> list = this.selectBySQL(sql, MaThuoc);
