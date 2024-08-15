@@ -5,9 +5,12 @@
 package com.clinic.plp_clinicmanage.ui;
 
 import com.clinic.plp_clinicmanage.models.NguoiDung;
+import com.clinic.plp_clinicmanage.models.ThuocModel;
 import com.clinic.plp_clinicmanage.services.NguoiDungDAO;
 import com.clinic.plp_clinicmanage.utils.MsgBox;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,19 +26,59 @@ public class BacSi extends javax.swing.JPanel {
         initComponents();
         fillTable();
     }
-    
-     int row = -1;
+
+    int row = -1;
     NguoiDungDAO dao = new NguoiDungDAO() {
-       
+
     };
-    
-       void init() {
+
+    void init() {
         setLocationRelativeTo(null);
         this.fillTable();
         this.row = -1;
         this.updateStatus();
     }
-    
+
+    public void setForm(NguoiDung nguoiDung) {
+        edtMaBS.setText(nguoiDung.getMaND() + "");
+        edtTenBS.setText(nguoiDung.getTenND() + "");
+        edtChucVu.setText(nguoiDung.getChucVu());
+
+        jblImage.setIcon(new ImageIcon(getClass().getResource("/com.clinicmanage_image/" + nguoiDung.getHinhAnh())));
+
+        Boolean gioiTinh = nguoiDung.isGioiTinh();
+        rbNam.setSelected(gioiTinh);
+        rbNu.setSelected(!gioiTinh);
+        edtEMAIL.setText(nguoiDung.getEmail());
+    }
+
+    public void clearForm() {
+        edtMaBS.setText("");
+        edtTenBS.setText("");
+        edtChucVu.setText("");
+        edtSĐT.setText("");
+        edtEMAIL.setText("");
+
+        rbNam.setSelected(true);
+    }
+
+    public NguoiDung getForm() {
+        NguoiDung nguoiDung = new NguoiDung();
+        if (!edtMaBS.getText().isEmpty()) {
+            nguoiDung.setMaND(Integer.parseInt(edtMaBS.getText()));
+        }
+        nguoiDung.setTenND(edtTenBS.getText());
+        nguoiDung.setEmail(edtEMAIL.getText());
+        nguoiDung.setSDT(edtSĐT.getText());
+        nguoiDung.setHinhAnh(jblImage.getText());
+        if (rbNam.isSelected()) {
+            nguoiDung.setGioiTinh(true);
+        } else {
+            nguoiDung.setGioiTinh(false);
+        }
+
+        return nguoiDung;
+    }
 
     void fillTable() {
         DefaultTableModel model = (DefaultTableModel) tblDoctor.getModel();
@@ -57,9 +100,60 @@ public class BacSi extends javax.swing.JPanel {
         }
     }
 
-//    public NguoiDung getData(){
-//        String MaND =   
-//    }
+    public String kiemLoiThem() {
+        String err = "";
+        String emailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
+        String sdtRegex = "^(0[35789]\\d{8}|02\\d{9})$";
+        NguoiDung bs = getForm();
+        if (bs.getTenND().isEmpty() || bs.getTenND().isBlank()) {
+            err += "Tên không được bỏ trống!\n";
+        }
+
+        if (!bs.getEmail().matches(emailRegex)) {
+            err += "Email sai định dạng\n";
+        }
+        if (dao.selectByEmail(bs.getEmail()) != null) {
+            err += "Email đã tồn tại\n";
+
+        }
+
+        if (!bs.getSDT().matches(sdtRegex)) {
+            err += "Số điện thoại sai định dạng\n";
+        }
+        if (dao.selectBySDT(bs.getSDT()) != null) {
+            err += "Số điện thoại đã tồn tại\n";
+
+        }
+
+        if (bs.getEmail().isEmpty() || bs.getEmail().isBlank()) {
+            err += "Địa chỉ không được bỏ trống!\n";
+        }
+        if (bs.getChucVu().isEmpty() || bs.getChucVu().isBlank()) {
+            err += "Tiền sử bệnh không được bỏ trống!\n";
+        }
+        return err;
+    }
+
+    public String kiemLoiSua() {
+        String err = "";
+        String emailRegex = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
+        String sdtRegex = "^(0[35789]\\d{8}|02\\d{9})$";
+        NguoiDung nd = getForm();
+        if (nd.getTenND().isEmpty() || nd.getTenND().isBlank()) {
+            err += "Tên không được bỏ trống!\n";
+        }
+
+        if (!nd.getEmail().matches(emailRegex)) {
+            err += "Email sai định dạng\n";
+        }
+
+        if (!nd.getSDT().matches(sdtRegex)) {
+            err += "Số điện thoại sai định dạng\n";
+        }
+
+        return err;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,7 +169,7 @@ public class BacSi extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDoctor = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jblImage = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         edtTenBS = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -89,14 +183,16 @@ public class BacSi extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         edtChucVu = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        rbEmail = new javax.swing.JTextField();
+        edtEMAIL = new javax.swing.JTextField();
+        edtMaBS = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnMoi = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
 
@@ -113,12 +209,25 @@ public class BacSi extends javax.swing.JPanel {
             new String [] {
                 "Mã bác sĩ", "Tên bác sĩ", "Email", "SĐT"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblDoctor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDoctorMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDoctor);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin"));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_image/BS-DUC.png"))); // NOI18N
+        jblImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_image/BS-DUC.png"))); // NOI18N
 
         jLabel4.setText("Tên bác sĩ:");
 
@@ -159,12 +268,14 @@ public class BacSi extends javax.swing.JPanel {
 
         jLabel8.setText("Email:");
 
-        rbEmail.setText("ducnt@gmail.com");
-        rbEmail.addActionListener(new java.awt.event.ActionListener() {
+        edtEMAIL.setText("ducnt@gmail.com");
+        edtEMAIL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbEmailActionPerformed(evt);
+                edtEMAILActionPerformed(evt);
             }
         });
+
+        jLabel3.setText("Mã bác sĩ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -173,7 +284,7 @@ public class BacSi extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rbEmail)
+                    .addComponent(edtEMAIL)
                     .addComponent(jScrollPane2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(edtSĐT)
@@ -191,31 +302,38 @@ public class BacSi extends javax.swing.JPanel {
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(26, 26, 26)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(edtMaBS))
                                     .addComponent(edtTenBS)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(edtChucVu, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel3)))
+                                .addComponent(jblImage)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addContainerGap()
+                        .addComponent(jblImage))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(edtMaBS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(9, 9, 9)
                         .addComponent(edtTenBS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(edtChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(edtChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,7 +345,7 @@ public class BacSi extends javax.swing.JPanel {
                 .addGap(4, 4, 4)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(edtEMAIL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -241,21 +359,31 @@ public class BacSi extends javax.swing.JPanel {
 
         jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com.clinicmanage_icon/back.png"))); // NOI18N
 
-        jButton2.setText("Mới");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnMoi.setText("Mới");
+        btnMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnMoiActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Thêm");
-
-        jButton4.setText("Sửa");
-
-        jButton5.setText("Xóa");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnThem.setText("Thêm");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnThemActionPerformed(evt);
+            }
+        });
+
+        btnSua.setText("Sửa");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
+
+        btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
             }
         });
 
@@ -286,13 +414,13 @@ public class BacSi extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton3)
+                                .addComponent(btnThem)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton5))
+                                .addComponent(btnXoa))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(btnMoi)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4)))
+                                .addComponent(btnSua)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -320,15 +448,15 @@ public class BacSi extends javax.swing.JPanel {
                                 .addComponent(jButton9)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton4)
-                                        .addComponent(jButton2))
+                                        .addComponent(btnSua)
+                                        .addComponent(btnMoi))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton5)
-                                        .addComponent(jButton3))))
+                                        .addComponent(btnXoa)
+                                        .addComponent(btnThem))))
                             .addComponent(jButton8)
                             .addComponent(jButton6))
-                        .addContainerGap(20, Short.MAX_VALUE))
+                        .addContainerGap(30, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -341,30 +469,82 @@ public class BacSi extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_edtChucVuActionPerformed
 
-    private void rbEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbEmailActionPerformed
+    private void edtEMAILActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEMAILActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_rbEmailActionPerformed
+    }//GEN-LAST:event_edtEMAILActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+        if (edtTenBS.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn bênh nhân cần xoá!");
+        } else {
+            try {
+                int maBN = Integer.parseInt(edtTenBS.getText());
+                dao.delete(maBN);
+                JOptionPane.showMessageDialog(this, "Xoá thành cống!");
+                fillTable();
+                clearForm();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Không thể xoá bệnh nhân này!!");
+            }
+        }
+    }//GEN-LAST:event_btnXoaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        clearForm();
+    }//GEN-LAST:event_btnMoiActionPerformed
+
+    private void tblDoctorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDoctorMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = tblDoctor.getSelectedRow();
+        if (evt.getClickCount() == 2) {
+            int id = Integer.parseInt(tblDoctor.getValueAt(selectedRow, 0).toString());
+            NguoiDung nguoiDung = dao.selectById(id);
+            setForm(nguoiDung);
+        }
+    }//GEN-LAST:event_tblDoctorMouseClicked
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        // TODO add your handling code here:
+        String err = kiemLoiThem();
+        if (!err.isEmpty()) {
+            JOptionPane.showMessageDialog(this, err);
+        } else {
+            NguoiDung nguoiDung = getForm();
+            dao.insert(nguoiDung);
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+            fillTable();
+        }
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        // TODO add your handling code here:
+        String err = kiemLoiSua();
+        if (!err.isEmpty()) {
+            JOptionPane.showMessageDialog(this, err);
+        } else {
+            NguoiDung bn = getForm();
+            dao.update(bn);
+            JOptionPane.showMessageDialog(this, "Sửa thành công");
+            fillTable();
+        }
+    }//GEN-LAST:event_btnSuaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMoi;
+    private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnThem;
+    private javax.swing.JButton btnXoa;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField edtChucVu;
+    private javax.swing.JTextField edtEMAIL;
     private javax.swing.JTextArea edtGhiChu;
+    private javax.swing.JTextField edtMaBS;
     private javax.swing.JTextField edtSĐT;
     private javax.swing.JTextField edtTenBS;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -381,14 +561,11 @@ public class BacSi extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField rbEmail;
+    private javax.swing.JLabel jblImage;
     private javax.swing.JRadioButton rbNam;
     private javax.swing.JRadioButton rbNu;
     private javax.swing.JTable tblDoctor;
     // End of variables declaration//GEN-END:variables
-   
-
- 
 
     private void setLocationRelativeTo(Object object) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

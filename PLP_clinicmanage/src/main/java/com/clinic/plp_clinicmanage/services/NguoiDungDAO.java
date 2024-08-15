@@ -61,7 +61,17 @@ public abstract class NguoiDungDAO extends ClinicDAO<NguoiDung, Integer> {
                 model.getMaND()
         );
     }
-
+        public NguoiDung selectByEmail(String email) {
+        String sql = "SELECT * FROM BenhNhan WHERE Email like ?";
+        List<NguoiDung> list = this.selectBySQL(sql, email);
+        return list.size() > 0 ? list.get(0) : null;
+    }
+     
+      public NguoiDung selectBySDT(String sdt) {
+        String sql = "SELECT * FROM BenhNhan WHERE SoDT like ?";
+        List<NguoiDung> list = this.selectBySQL(sql, sdt);
+        return list.size() > 0 ? list.get(0) : null;
+    }
     public void delete(Integer MaND) {
         String sql = "DELETE FROM NGUOIDUNG WHERE MaND=?";
         XJdbc.update(sql, MaND);
@@ -94,12 +104,7 @@ public abstract class NguoiDungDAO extends ClinicDAO<NguoiDung, Integer> {
         List<NguoiDung> list = this.selectBySQL(sql, username);
         return list.size() > 0 ? list.get(0) : null;
     }
-    
-    public NguoiDung selectByEmail(String email) {
-        String sql = "SELECT * FROM NguoiDung WHERE Email like ?";
-        List<NguoiDung> list = this.selectBySQL(sql, email);
-        return list.size() > 0 ? list.get(0) : null;
-    }
+      
 
 protected List<NguoiDung> selectBySQL(String sql, Object... args) {
     List<NguoiDung> list = new ArrayList<>();
