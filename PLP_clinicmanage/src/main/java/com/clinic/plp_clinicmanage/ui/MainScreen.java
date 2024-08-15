@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import com.clinic.plp_clinicmanage.utils.Auth;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -39,11 +40,11 @@ public class MainScreen extends javax.swing.JFrame implements ActionListener {
         this.menuExit.addActionListener(this);
         edtUserName.setText(Auth.user.getTenND());
         int role = Auth.user.getVaiTro();
-        if(role==0){
+        if (role == 0) {
             rbGĐ.setSelected(true);
-        }else if(role==1){
+        } else if (role == 1) {
             rbNV.setSelected(true);
-        }else if(role==2){
+        } else if (role == 2) {
             rbBS.setSelected(true);
         }
     }
@@ -322,7 +323,7 @@ public class MainScreen extends javax.swing.JFrame implements ActionListener {
         Auth.user = null;
         this.dispose();
         DangNhap dangNhap = new DangNhap();
-        dangNhap.setVisible(true); 
+        dangNhap.setVisible(true);
         dangNhap.show();
     }//GEN-LAST:event_menuSignOutActionPerformed
 
@@ -395,105 +396,128 @@ public class MainScreen extends javax.swing.JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btn_List_Staff)) {
-            chilPanel = new NhanVien();
-            panelMainSpace.removeAll();
-            panelMainSpace.add(chilPanel, BorderLayout.CENTER);
-            panelMainSpace.revalidate(); // Revalidate the panel to update its layout
-            panelMainSpace.repaint();
+            if (Auth.isDoctor() || Auth.isStaff()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập trang này!");
+            } else {
+                chilPanel = new NhanVien();
+                panelMainSpace.removeAll();
+                panelMainSpace.add(chilPanel, BorderLayout.CENTER);
+                panelMainSpace.revalidate(); // Revalidate the panel to update its layout
+                panelMainSpace.repaint();
+            }
         }
-        if (e.getSource().equals(btn_List_Doctor)){
-            chilPanel = new BacSi();
-            panelMainSpace.removeAll();
-            panelMainSpace.add(chilPanel, BorderLayout.CENTER);
-            panelMainSpace.revalidate(); // Revalidate the panel to update its layout
-            panelMainSpace.repaint();
+        if (e.getSource().equals(btn_List_Doctor)) {
+            if (Auth.isDoctor()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập trang này!");
+            } else {
+                chilPanel = new BacSi();
+                panelMainSpace.removeAll();
+                panelMainSpace.add(chilPanel, BorderLayout.CENTER);
+                panelMainSpace.revalidate(); // Revalidate the panel to update its layout
+                panelMainSpace.repaint();
+            }
         }
-        if (e.getSource().equals(btn_List_Patients)){
-            chilPanel = new BenhNhan();
-            panelMainSpace.removeAll();
-            panelMainSpace.add(chilPanel, BorderLayout.CENTER);
-            panelMainSpace.revalidate(); // Revalidate the panel to update its layout
-            panelMainSpace.repaint();
+        if (e.getSource().equals(btn_List_Patients)) {
+            if (Auth.isDoctor()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập trang này!");
+            } else {
+                chilPanel = new BenhNhan();
+                panelMainSpace.removeAll();
+                panelMainSpace.add(chilPanel, BorderLayout.CENTER);
+                panelMainSpace.revalidate(); // Revalidate the panel to update its layout
+                panelMainSpace.repaint();
+            }
         }
-        if (e.getSource().equals(btn_List_Medicine)){
-            chilPanel = new Thuoc();
-            panelMainSpace.removeAll();
-            panelMainSpace.add(chilPanel, BorderLayout.CENTER);
-            panelMainSpace.revalidate(); // Revalidate the panel to update its layout
-            panelMainSpace.repaint();
+        if (e.getSource().equals(btn_List_Medicine)) {
+            if (Auth.isDoctor()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập trang này!");
+            } else {
+                chilPanel = new Thuoc();
+                panelMainSpace.removeAll();
+                panelMainSpace.add(chilPanel, BorderLayout.CENTER);
+                panelMainSpace.revalidate(); // Revalidate the panel to update its layout
+                panelMainSpace.repaint();
+            }
         }
-        if (e.getSource().equals(btn_AddNew_Pointment)){
+        if (e.getSource().equals(btn_AddNew_Pointment)) {
             chilPanel = new Pay();
             panelMainSpace.removeAll();
             panelMainSpace.add(chilPanel, BorderLayout.CENTER);
             panelMainSpace.revalidate(); // Revalidate the panel to update its layout
             panelMainSpace.repaint();
         }
-       
-        if (e.getSource().equals(menuChangePassword)){
+
+        if (e.getSource().equals(menuChangePassword)) {
             chilPanel = new DoiMatKhau();
             panelMainSpace.removeAll();
             panelMainSpace.add(chilPanel, BorderLayout.CENTER);
             panelMainSpace.revalidate(); // Revalidate the panel to update its layout
             panelMainSpace.repaint();
         }
-        if (e.getSource().equals(menuSignOut)){
+        if (e.getSource().equals(menuSignOut)) {
 //            chilPanel = new ToaThuoc();
             panelMainSpace.removeAll();
 //            panelMainSpace.add(chilPanel, BorderLayout.CENTER);
 //            panelMainSpace.revalidate(); // Revalidate the panel to update its layout
 //            panelMainSpace.repaint();
         }
-        if (e.getSource().equals(menuStaff)){
-            chilPanel = new NhanVien();
-            panelMainSpace.removeAll();
-            panelMainSpace.add(chilPanel, BorderLayout.CENTER);
-            panelMainSpace.revalidate(); // Revalidate the panel to update its layout
-            panelMainSpace.repaint();
+        if (e.getSource().equals(menuStaff)) {
+            if (Auth.isDoctor() || Auth.isStaff()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập trang này!");
+            } else {
+                chilPanel = new NhanVien();
+                panelMainSpace.removeAll();
+                panelMainSpace.add(chilPanel, BorderLayout.CENTER);
+                panelMainSpace.revalidate(); // Revalidate the panel to update its layout
+                panelMainSpace.repaint();
+            }
         }
-        
-        if (e.getSource().equals(menuDoctor)){
+
+        if (e.getSource().equals(menuDoctor)) {
             chilPanel = new BacSi();
             panelMainSpace.removeAll();
             panelMainSpace.add(chilPanel, BorderLayout.CENTER);
             panelMainSpace.revalidate(); // Revalidate the panel to update its layout
             panelMainSpace.repaint();
         }
-        if (e.getSource().equals(menuPatient)){
-            chilPanel = new BenhNhan();
-            panelMainSpace.removeAll();
-            panelMainSpace.add(chilPanel, BorderLayout.CENTER);
-            panelMainSpace.revalidate(); // Revalidate the panel to update its layout
-            panelMainSpace.repaint();
+        if (e.getSource().equals(menuPatient)) {
+            if (Auth.isDoctor()) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập trang này!");
+            } else {
+                chilPanel = new BenhNhan();
+                panelMainSpace.removeAll();
+                panelMainSpace.add(chilPanel, BorderLayout.CENTER);
+                panelMainSpace.revalidate(); // Revalidate the panel to update its layout
+                panelMainSpace.repaint();
+            }
         }
-        
-        if (e.getSource().equals(menuMedicine)){
+
+        if (e.getSource().equals(menuMedicine)) {
             chilPanel = new ToaThuoc();
             panelMainSpace.removeAll();
             panelMainSpace.add(chilPanel, BorderLayout.CENTER);
             panelMainSpace.revalidate(); // Revalidate the panel to update its layout
             panelMainSpace.repaint();
         }
-        if (e.getSource().equals(menuStatitic)){
+        if (e.getSource().equals(menuStatitic)) {
             chilPanel = new ThongKe();
             panelMainSpace.removeAll();
             panelMainSpace.add(chilPanel, BorderLayout.CENTER);
             panelMainSpace.revalidate(); // Revalidate the panel to update its layout
             panelMainSpace.repaint();
         }
-        if (e.getSource().equals(menuHelp)){
+        if (e.getSource().equals(menuHelp)) {
             chilPanel = new ThongKe();
             panelMainSpace.removeAll();
             panelMainSpace.add(chilPanel, BorderLayout.CENTER);
             panelMainSpace.revalidate(); // Revalidate the panel to update its layout
             panelMainSpace.repaint();
         }
-        
-        if (e.getSource().equals(menuExit)){
+
+        if (e.getSource().equals(menuExit)) {
             panelMainSpace.removeAll();
             this.panelMainSpace.setVisible(false);
         }
-        
 
     }
 }
