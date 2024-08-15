@@ -61,8 +61,9 @@ public abstract class NguoiDungDAO extends ClinicDAO<NguoiDung, Integer> {
                 model.getMaND()
         );
     }
-        public NguoiDung selectByEmail(String email) {
-        String sql = "SELECT * FROM BenhNhan WHERE Email like ?";
+        
+    public NguoiDung selectByEmail(String email) {
+        String sql = "SELECT * FROM NguoiDung WHERE Email like ?";
         List<NguoiDung> list = this.selectBySQL(sql, email);
         return list.size() > 0 ? list.get(0) : null;
     }
